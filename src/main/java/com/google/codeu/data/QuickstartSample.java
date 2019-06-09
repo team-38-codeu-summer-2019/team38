@@ -13,7 +13,7 @@ public class QuickstartSample {
     /**
      * Demonstrates using the Text-to-Speech API.
      */
-    public static void main(String args) throws Exception {
+    public static void main(String... args) throws Exception {
         // Instantiates a client
         try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
             // Set the text input to be synthesized

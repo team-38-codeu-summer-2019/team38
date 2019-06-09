@@ -1,26 +1,32 @@
-let message = document.getElementById("message-form");
+async function f() {
+    let message = document.getElementById("tts-input").value;
 
-if (message === "") {
-    // Do nothing; consier showing a simple error to the user.
-}
+    if (message === "") {
+        // Do nothing; consier showing a simple error to the user.
+        window.alert("Enter message to be played")
+    }
 
-try {
-    let resp = await fetch("/a11y/tts", {
-        method: "POST",
-        body: message, // The message from the form
-        headers: {
-            "Content-Type": "text/plain"
-        },
-    })
+    try {
+        let resp = await fetch("/a11y/tts", {
+            method: "POST",
+            body: message, // The message from the form
+            headers: {
+                "Content-Type": "text/plain"
+            },
+        })
 
-    // Our audio is binary data - often called a "blob" - and
-    // not text data.
-    let audio = await resp.blob()
+        // Our audio is binary data - often called a "blob" - and
+        // not text data.
+        let audio = await resp.blob()
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AudioContext();
 
-    // TODO e.g. <audio id = "audio-11">
-    //           <audio id = "something" src = "">
-    let elem = document.getElementById("audio-")
+        let elem = document.getElementById("audio-")
+        var blobURL = window.URL.createObjectURL(audio);
+        elem.src = blobURL;
+        elem.play()
 
-} catch (err) {
-    throw new Error(`Unable to call the Text to Speech API: {e}`)
+    } catch (err) {
+        throw new Error(`Unable to call the Text to Speech API: {e}`)
+    }
 }
