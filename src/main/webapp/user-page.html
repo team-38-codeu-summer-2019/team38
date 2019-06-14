@@ -22,6 +22,7 @@ limitations under the License.
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/user-page-loader.js"></script>
+    <script src="/js/text-to-speech.js"></script>
   </head>
   <body onload="buildUI();">
     <nav>
@@ -49,6 +50,14 @@ limitations under the License.
       <br/>
       <input type="submit" value="Submit">
     </form>
+    <br/>
+
+    Enter message to be played:
+    <br/>
+    <textarea name="text" id="tts-input"></textarea>
+    <br/>
+    <button onclick="f()">Play</button>
+    <audio id="audio-"></audio>
     <hr/>
 
     <div id="message-container">Loading...</div>
