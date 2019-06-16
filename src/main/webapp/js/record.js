@@ -42,7 +42,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
                 audio.setAttribute('controls', '');
 
-                blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+                blob = new Blob(chunks, { 'type' : 'audio/webm; codecs=opus' });
                 chunks = [];
                 var audioURL = window.URL.createObjectURL(blob);
                 audio.src = audioURL;
@@ -56,14 +56,18 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         );
 
     submit.onclick = async function(){
-        let fd = new FormData();
-        fd.append('audio_data', blob);
-        let resp = await fetch("/a11y/stt", {
-            method: "POST",
-            body: fd,
-        }).then(response => {
-            return response.blob();
-        });
+        var oReq = new XMLHttpRequest();
+        oReq.open("POST", "/a11y/stt", true);
+        oReq.onload = function (oEvent) {
+            // Uploaded.
+        };
+        oReq.send(blob);
+        oReq.onreadystatechange = function () {
+            if(oReq.readyState === 4 && oReq.status === 200) {
+                var result = document.getElementById('output-stt');
+                result.value = oReq.response;
+            }
+        };
     }
 } else {
     console.log('getUserMedia not supported on your browser!');
