@@ -5,6 +5,3 @@ target
 .idea
 *.iml
 .DS_Store
-
-# service account key
-su19-codeu-38-6755*.json
