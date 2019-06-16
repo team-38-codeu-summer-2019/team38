@@ -60,7 +60,7 @@ limitations under the License.
       <artifactId>google-cloud-datastore</artifactId>
       <version>1.52.0</version>
     </dependency>
-    
+
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-language</artifactId>
@@ -72,11 +72,17 @@ limitations under the License.
       <artifactId>google-cloud-texttospeech</artifactId>
       <version>0.80.0-beta</version>
     </dependency>
-	
+
     <dependency>
       <groupId>com.google.api</groupId>
       <artifactId>gax</artifactId>
       <version>1.45.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-speech</artifactId>
+      <version>0.80.0-beta</version>
     </dependency>
 
   </dependencies>
