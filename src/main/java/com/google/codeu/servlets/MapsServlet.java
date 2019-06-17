@@ -13,7 +13,7 @@ import java.util.Scanner;
 /**
  * Returns UFO data as a JSON array, e.g. [{"lat": 38.4404675, "lng": -122.7144313}]
  */
-@WebServlet("/ufo")
+@WebServlet("/ufo-data")
 public class MapsServlet extends HttpServlet {
     
     private JsonArray ufoSightingArray;
@@ -22,7 +22,7 @@ public class MapsServlet extends HttpServlet {
     public void init() {
         ufoSightingArray = new JsonArray();
         Gson gson = new Gson();
-        Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/ufo.csv"));
+        Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/ufo-data.csv"));
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] cells = line.split(",");
