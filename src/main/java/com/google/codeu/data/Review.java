@@ -2,6 +2,7 @@ package com.google.codeu.data;
 
 import java.util.UUID;
 
+// TODO: add field for  image
 public class Review {
     private UUID id;
     private String user;
