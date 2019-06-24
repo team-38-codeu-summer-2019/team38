@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A New Chart</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {packages: ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart(){
+            var rating_data = new google.visualization.DataTable();
+            //define columns for the DataTable instance
+            rating_data.addColumn('string');
+            rating_data.addColumn('number', 'Votes');
+
+            //add data to rating_data
+            rating_data.addRows([
+                ["5 \u2605", 6],
+                ["4 \u2605", 10],
+                ["3 \u2605", 7],
+                ["2 \u2605", 4],
+                ["1 \u2605", 8]
+            ]);
+
+            var chart = new google.visualization.BarChart(document.getElementById('rating_chart'));
+            chart.draw(rating_data);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Ratings</h1>
+
+    <div id="rating_chart"></div>
+</body>
+</html>
