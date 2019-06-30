@@ -71,7 +71,7 @@ public class Datastore {
         UUID id = UUID.fromString(idString);
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
-        int rating = (int) entity.getProperty("rating");
+        long rating = (long) entity.getProperty("rating");
         long timestamp = (long) entity.getProperty("timestamp");
 
         Review review = new Review(id, user, merchant, text, rating, timestamp);

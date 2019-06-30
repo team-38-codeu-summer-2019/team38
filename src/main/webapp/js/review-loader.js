@@ -31,7 +31,7 @@ function fetchReviews() {
           reviewsContainer.innerHTML = '';
         }
         reviews.forEach((review) => {
-          const reviewDiv = buildMessageDiv(review);
+          const reviewDiv = buildReviewDiv(review);
           reviewsContainer.appendChild(reviewDiv);
         });
 
@@ -56,9 +56,16 @@ function calculateAvgRating(reviews) {
   * @param {Array of Reviews} reviews
   */
 function setOverallRating(reviews) {
-    rating = calculateAvgRating(reviews);
     const ratingContainer = document.getElementById('overall-rating-container');
-    ratingContainer.innerHTML = '<p>Rating = ${rating}</p>';
+
+    console.log(reviews);
+    if (reviews.length > 0) {
+        rating = calculateAvgRating(reviews);
+        ratingContainer.innerHTML = '<p>Rating = ' + rating + '</p>';
+    } else {
+        ratingContainer.innerHTML = '';
+    }
+
 }
 
 /**
@@ -72,6 +79,10 @@ function buildReviewDiv(review) {
   headerDiv.appendChild(document.createTextNode(
       review.user + ' - ' + new Date(review.timestamp)));
 
+  const ratingDiv = document.createElement('div');
+  ratingDiv.classList.add('rating-body');
+  ratingDiv.innerHTML = 'Rating = ' + review.rating;
+
   const bodyDiv = document.createElement('div');
   bodyDiv.classList.add('review-body');
   bodyDiv.innerHTML = review.text;
@@ -79,13 +90,21 @@ function buildReviewDiv(review) {
   const reviewDiv = document.createElement('div');
   reviewDiv.classList.add('review-div');
   reviewDiv.appendChild(headerDiv);
+  reviewDiv.appendChild(ratingDiv);
   reviewDiv.appendChild(bodyDiv);
 
   return reviewDiv;
+}
+
+// set merchant name in all hidden input forms
+function setMerchantInput() {
+    document.getElementById('merchant-input').value = parameterMerchant
 }
 
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
   fetchReviews();
+  setMerchantInput();
 }
+

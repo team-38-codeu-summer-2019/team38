@@ -8,7 +8,7 @@ public class Review {
     private String user;
     private String merchant;
     private String text;
-    private int rating;
+    private long rating;
     private long timestamp;
 
 
@@ -17,11 +17,11 @@ public class Review {
      * {@code rating}.
      * Generates a random ID and uses the current system time for the creation time.
      */
-    public Review(String user, String merchant, String text, int rating) {
+    public Review(String user, String merchant, String text, long rating) {
         this(UUID.randomUUID(), user, merchant, text, rating,  System.currentTimeMillis());
     }
 
-    public Review(UUID id, String user, String merchant, String text, int rating, long timestamp) {
+    public Review(UUID id, String user, String merchant, String text, long rating, long timestamp) {
         this.id = id;
         this.user = user;
         this.merchant = merchant;
@@ -44,7 +44,7 @@ public class Review {
         return text;
     }
 
-    public int getRating() { return rating; }
+    public long getRating() { return rating; }
 
     public long getTimestamp() {
         return timestamp;

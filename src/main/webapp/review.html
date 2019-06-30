@@ -4,12 +4,34 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/review.css">
     <script src="/js/review-loader.js"></script>
 </head>
 <body onload="buildUI()">
     <h1 id="page-title">Review</h1>
 
     <div id="overall-rating-container">Loading...</div>
-    <div id="reviews-container-container">Loading...</div>
+    <div id="reviews-container">Loading...</div>
+
+    <form id="review-form" action="/reviews" method="POST" class="hidden">
+        Enter your review:
+        <br/>
+        Rating:
+        <select name="rating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <br/>
+        <input name="merchant" id="merchant-input" value="" type="hidden">
+        <textarea name="text" id="review-input"></textarea>
+        <br/>
+        <input type="submit" value="Submit">
+    </form>
+    <br/>
 </body>
 </html>
