@@ -23,9 +23,16 @@ limitations under the License.
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <div id="nav-placeholder"></div>
+    <!-- insert navigation bar from navigation.html -->
+    <script>
+      $.get("navigation.html", function(data){
+        $("#nav-placeholder").replaceWith(data);
+      });
+    </script>
   </head>
   <body style="margin: 10px;">
-    <div id="nav-placeholder"></div>
     <h1>CodeU Starter Project</h1>
     <p>This is the CodeU starter project. Click the links above to login and visit your page.
     You can post messages on your page, and you can visit other user pages if you have
@@ -35,10 +42,3 @@ limitations under the License.
   </body>
 </html>
 
-<script src="//code.jquery.com/jquery.min.js"></script>
-<script>
-// insert navigation element from navigation.html
-$.get("navigation.html", function(data){
-    $("#nav-placeholder").replaceWith(data);
-});
-</script>

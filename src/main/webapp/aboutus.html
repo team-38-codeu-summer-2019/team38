@@ -23,15 +23,16 @@ limitations under the License.
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <nav>
-      <ul id="navigation">
-        <li><a href="/">Home</a></li>
-        <li><a href="/aboutus.html">About Our Team</a></li>
-      </ul>
-    </nav>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <div id="nav-placeholder"></div>
+    <!-- insert navigation bar from navigation.html -->
+    <script>
+      $.get("navigation.html", function(data){
+        $("#nav-placeholder").replaceWith(data);
+      });
+    </script>
   </head>
   <body style="margin: 10px;">
-    <div id="nav-placeholder"></div>
     <h1>About Our Team</h1>
     <div class="panel panel-default">
       <div class="panel-heading"><h2>Kwee Lung Sin</h2></div>
@@ -77,10 +78,4 @@ limitations under the License.
   </body>
 </html>
 
-<!-- insert navigation bar from navigation.html -->
-<script src="//code.jquery.com/jquery.min.js"></script>
-<script>
-$.get("navigation.html", function(data){
-    $("#nav-placeholder").replaceWith(data);
-});
-</script>
+
