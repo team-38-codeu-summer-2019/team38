@@ -20,6 +20,11 @@
   padding: 5px;
 }
 
+.rating-body {
+    border-bottom: thin solid black;
+    padding: 5px;
+}
+
 /* Give the message body a margin so the text
    isn't too close to the border. */
 .review-body {

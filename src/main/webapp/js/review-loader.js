@@ -15,6 +15,22 @@ function setPageTitle() {
   document.title = parameterMerchant + ' - Review';
 }
 
+/**
+ * Shows the review form if the user is logged in.
+ */
+function showReviewFormIfLogin() {
+  fetch('/login-status')
+      .then((response) => {
+        return response.json();
+      })
+      .then((loginStatus) => {
+        if (loginStatus.isLoggedIn) {
+          const reviewForm = document.getElementById('review-form');
+          reviewForm.classList.remove('hidden');
+        }
+      });
+}
+
 
 /** Fetches messages and add them to the page. */
 function fetchReviews() {
@@ -61,7 +77,7 @@ function setOverallRating(reviews) {
     console.log(reviews);
     if (reviews.length > 0) {
         rating = calculateAvgRating(reviews);
-        ratingContainer.innerHTML = '<p>Rating = ' + rating + '</p>';
+        ratingContainer.innerHTML = '<p>Rating = ' + rating.toFixed(1) + '</p>';
     } else {
         ratingContainer.innerHTML = '';
     }
@@ -104,6 +120,7 @@ function setMerchantInput() {
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
+  showReviewFormIfLogin();
   fetchReviews();
   setMerchantInput();
 }
