@@ -20,15 +20,9 @@ limitations under the License.
     <meta charset="UTF-8">
     <title>CodeU 2019 Starter Project</title>
     <link rel="stylesheet" href="/css/main.css">
-    <script src="/js/navigation-loader.js"></script>
   </head>
-  <body onload="addLoginOrLogoutLinkToNavigation();">
-    <nav>
-      <ul id="navigation">
-        <li><a href="/">Home</a></li>
-        <li><a href="/aboutus.html">About Our Team</a></li>
-      </ul>
-    </nav>
+  <body>
+    <div id="nav-placeholder"></div>
     <h1>CodeU Starter Project</h1>
     <p>This is the CodeU starter project. Click the links above to login and visit your page.
     You can post messages on your page, and you can visit other user pages if you have
@@ -37,3 +31,11 @@ limitations under the License.
     You could start by modifying this page to tell the world more about your team.</p>
   </body>
 </html>
+
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script>
+// insert navigation element from navigation.html
+$.get("navigation.html", function(data){
+    $("#nav-placeholder").replaceWith(data);
+});
+</script>
