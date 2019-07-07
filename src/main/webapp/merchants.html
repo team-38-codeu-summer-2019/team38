@@ -4,6 +4,26 @@
     <meta charset="UTF-8">
     <title>{ name }</title>
     <link rel="stylesheet" href="/css/merchants.css">
+    <script type="text/javascript">
+      function fetchMerchant(id) {
+        const url = '/merchants?id=' + id
+        fetch(url).then((response) => {
+          return response.json();
+        }).then((merchant) => {
+          const merchantContainer = document.getElementById('merchant-container');
+          merchantContainer.innerHTML = '';
+
+          const imgElement = buildImageElement(merchant.image);
+          merchantContainer.appendChild(imgElement);
+        })
+      }
+
+      function buildImageElement(image){
+        const imgElement = document.createElement('img');
+        imgElement.setAttribute('src', image);
+        return imgElement;
+      }
+    </script>
   </head>
   <body>
     <nav>
@@ -14,7 +34,7 @@
     </nav>
 
     <h2>{ name }</h2>
-    <div class="merchant-info">
+    <div class="merchant-container">
       <div class="merchant-photo left">
           <img 
             class="merchant-img"
