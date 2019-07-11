@@ -37,11 +37,15 @@ limitations under the License.
     </nav>
     <h1 id="page-title">User Page</h1>
 
-    <div id="about-me-container">Loading...</div>
+    <div id="university-container">Loading...</div><br/>
+    <div id="about-me-container"></div><br/>
     <div id="about-me-form" class="hidden">
       <form action="/about" method="POST">
-        <textarea name="about-me" placeholder="about me" rows=4 required></textarea>
+        University:<br/>
+        <input type="text" name="university" placeholder="university"></input><br/>
         <br/>
+        About Me:<br/>
+        <textarea name="about-me" placeholder="about me" rows=4></textarea><br/>
         <input type="submit" value="Submit">
       </form>
     </div>

@@ -73,14 +73,21 @@ function fetchAboutMe() {
   const url = '/about?user=' + parameterUsername;
   fetch(url)
       .then((response) => {
-        return response.text();
+        return response.json();
       })
-      .then((aboutMe) => {
-        const aboutMeContainer = document.getElementById('about-me-container');
-        if (aboutMe == '') {
-          aboutMe = 'This user has not entered any information yet.';
+      .then((responseJson) => {
+        const universityInput = document.getElementsByName('university')[0];
+        universityInput.value = responseJson.university;
+        const aboutMeInput = document.getElementsByName('about-me')[0];
+        aboutMeInput.value = responseJson.aboutMe;
+        
+        const universityContainer = document.getElementById('university-container');
+        universityContainer.innerHTML = responseJson.university;
+        if (responseJson.aboutMe == '') {
+          responseJson.aboutMe = 'This user has not entered any information yet.';
         }
-        aboutMeContainer.innerHTML = aboutMe;
+        const aboutMeContainer = document.getElementById('about-me-container');
+        aboutMeContainer.innerHTML = responseJson.aboutMe;
       });
 }
 
