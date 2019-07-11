@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Text to Speech and Speech to Text</title>
+        <script src="/js/text-to-speech.js"></script>
+    </head>
+    <body>
+        <h1>Text to Speech and Speech to Text</h1>
+
+        <div id="tts">
+            Enter message to be played:
+            <br/>
+            <textarea name="text" id="tts-input"></textarea>
+            <br/>
+            <button onclick="f()">Play</button>
+            <audio id="audio-"></audio>
+        </div>
+
+        <br/>
+
+        <div id="stt">
+            <button id="record-stt">Record</button>
+            <button id="stop-stt">Stop</button>
+            <button id="submit-stt">Submit</button>
+            <div>
+                <audio id="audio-stt"></audio>
+                <div>
+                    <textarea id="output-stt" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="/js/record.js"></script>
+</html>
