@@ -39,6 +39,14 @@ public class Merchant {
     return image;
   }
 
+  public long getLatitude() {
+    return latitude;
+  }
+
+  public long getLongitude() {
+    return longitude;
+  }
+
   public String getLocation() {
     return location;
   }
