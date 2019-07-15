@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Merchant Feed</title>
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/user-page.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="/js/navigation-loader.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<nav>
+<ul id="navigation">
+    <li><a href="/index.html">Home</a></li>
+    <li><a href="/aboutus.html">About Our Team</a></li>
+    <li><a href="/">Search Merchant</a></li>
+</ul>
+</nav>
+<script>
+    
+  // Fetch messages and add them to the page.
+  function fetchMerchants(){
+    let merchants = [];
+    merchObj1 = {"id":"123123","cafe":"McDonald's","name":"McDonald's","location":"2/F ABC Building, Centennial Campus","distance_meters":50,"cuisine":"Western"};
+    merchObj2 = {"id":"789789","cafe":"Swire Canteen","name":"Ebeneezer's","location":"5/F Computing Building, Main Campus","distance_meters":100,"cuisine":"Indian"};
+    merchants.push(merchObj1);
+    merchants.push(merchObj2);
+    // const url = '/merchants';
+    // fetch(url).then((response) => {
+    //   return response.json();
+    // }).then((merchants) => {
+      const merchantContainer = document.getElementById('message-container');
+      if(merchants.length == 0){
+        merchantContainer.innerHTML = '<p>There are no posts yet.</p>';
+      }
+      else{
+        merchantContainer.innerHTML = '';  
+      }
+      merchants.forEach((merchant) => {  
+       const merchantDiv = buildMerchantDiv(merchant);
+       merchantContainer.appendChild(merchantDiv);
+      });
+    // });
+  }
+  
+  function buildMerchantDiv(merchant){
+   const nameDiv = document.createElement('div');
+   nameDiv.classList.add("left-align");
+   nameDiv.appendChild(document.createTextNode(merchant.name)); 
+      
+   const headerDiv = document.createElement('div');
+   headerDiv.classList.add('message-header');
+   headerDiv.appendChild(nameDiv);
+   
+   const bodyDiv1 = document.createElement('div');
+   bodyDiv1.classList.add('message-body');
+   bodyDiv1.appendChild(document.createTextNode(merchant.cuisine));
+
+   const bodyDiv2 = document.createElement('div');
+   bodyDiv2.classList.add('message-body');
+   bodyDiv2.appendChild(document.createTextNode(merchant.distance_meters+"m"));
+
+   const bodyDiv3 = document.createElement('div');
+   bodyDiv3.classList.add('message-body');
+   bodyDiv3.appendChild(document.createTextNode(merchant.location));
+   
+   const merchantDiv = document.createElement('div');
+   merchantDiv.classList.add("message-div");
+   merchantDiv.appendChild(headerDiv);
+   merchantDiv.appendChild(bodyDiv1);
+   merchantDiv.appendChild(bodyDiv2);
+   merchantDiv.appendChild(bodyDiv3);
+   
+   return merchantDiv;
+  }
+  
+  // Fetch data and populate the UI of the page.
+  function buildUI(){
+   fetchMerchants();
+  }
+</script>
+</head>
+<body onload="buildUI()">
+ <div id="content">
+  <h1>Merchant Feed</h1>
+  <div id="search-form">
+    <form action="/search" method="GET">
+      Search <input name="merchant" placeholder="Merchant Name" required>
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+  <hr/>
+  <div id="message-container">Loading...</div>
+ </div>
+</body>
+</html>
