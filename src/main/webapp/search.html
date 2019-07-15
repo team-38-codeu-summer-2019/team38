@@ -12,7 +12,7 @@
 <ul id="navigation">
     <li><a href="/index.html">Home</a></li>
     <li><a href="/aboutus.html">About Our Team</a></li>
-    <li><a href="/">Search Merchant</a></li>
+    <li><a href="/search.html">Merchant Feed</a></li>
 </ul>
 </nav>
 <script>
@@ -20,9 +20,9 @@
   // Fetch messages and add them to the page.
   function fetchMerchants(merchantSearch){
     let merchants = [];
-    merchObj1 = {"id":"123123","cafe":"McDonald's","name":"McDonald's","location":"2/F ABC Building, Centennial Campus","distance_meters":50,"cuisine":"Western"};
-    merchObj2 = {"id":"789789","cafe":"Swire Canteen","name":"Ebeneezer's","location":"5/F Computing Building, Main Campus","distance_meters":100,"cuisine":"Indian"};
-    merchObj3 = {"id":"567567","cafe":"ABC Canteen","name":"Domino's Pizza","location":"3/F Business Building, Main Campus","distance_meters":20,"cuisine":"Western"};
+    merchObj1 = {"id":"123123","cafe":"McDonald's","name":"McDonald's","location":"2/F ABC Building, Centennial Campus","latitude":22.28142, "longitude": 114.17258,"cuisine":"Western"};
+    merchObj2 = {"id":"789789","cafe":"Swire Canteen","name":"Ebeneezer's","location":"5/F Computing Building, Main Campus","latitude":22.285978, "longitude": 114.191490,"cuisine":"Indian"};
+    merchObj3 = {"id":"567567","cafe":"ABC Canteen","name":"Domino's Pizza","location":"3/F Business Building, Main Campus","latitude":22.283,"longitude": 114.181490, "cuisine":"Western"};
     merchants.push(merchObj1);
     merchants.push(merchObj2);
     merchants.push(merchObj3);
@@ -32,19 +32,28 @@
     // }).then((merchants) => {
       const merchantContainer = document.getElementById('message-container');
       if(merchants.length == 0){
-        merchantContainer.innerHTML = '<p>There are no posts yet.</p>';
+        merchantContainer.innerHTML = '<p>There are no merchants yet.</p>';
       }
       else{
         merchantContainer.innerHTML = '';  
       }
-      merchants.sort((a,b) => a.distance_meters - b.distance_meters); //sort by nearest distance
+      merchants.sort( function(a,b){
+        if(a.name < b.name) { return -1; }
+        if(a.name > b.name) { return 1; }
+        return 0;
+      });
+      let count = 0;
       merchants.forEach((merchant) => {  
        console.log(merchant.name+" "+merchantSearch);
-       if( (merchant.name.includes(merchantSearch)) || (merchant.location.includes(merchantSearch)) || (merchantSearch=="") ) {
+       if( (merchant.name.toLowerCase().includes(merchantSearch.toLowerCase())) || (merchant.location.toLowerCase().includes(merchantSearch.toLowerCase())) || (merchantSearch=="") ) {
         const merchantDiv = buildMerchantDiv(merchant);
         merchantContainer.appendChild(merchantDiv);
+        count++;
        }
       });
+      if(count==0){
+        merchantContainer.innerHTML = '<p>Search did not match any merchant.</p>';  
+      }
     // });
   }
   
@@ -63,7 +72,19 @@
 
    const bodyDiv2 = document.createElement('div');
    bodyDiv2.classList.add('message-body');
-   bodyDiv2.appendChild(document.createTextNode(merchant.distance_meters+"m"));
+   if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lon: position.coords.longitude
+      };
+    var distance = getDistance(pos.lat,pos.lon,merchant.latitude,merchant.longitude);
+    bodyDiv2.appendChild(document.createTextNode(distance));
+    });
+   } else {
+     console.log("error");
+   }
+  //  bodyDiv2.appendChild(document.createTextNode(merchant.distance_meters+"m"));
 
    const bodyDiv3 = document.createElement('div');
    bodyDiv3.classList.add('message-body');
@@ -81,33 +102,54 @@
   
   // Fetch data and populate the UI of the page.
   function buildUI(merchant){
-    console.log(merchant);
-   fetchMerchants(merchant);
+    fetchMerchants(merchant);
   }
 
-  function getMerchantName(){
+  function foundLocation(position){
+    curr.lat = position.coords.latitude;
+    curr.lon = position.coords.longitude;
+  }
+
+  function getDistance(lat1,lon1,lat2,lon2) {
+    console.log(lat1+" "+lon1+" "+lat2+" "+lon2);
+    var R = 6371; // km (change this constant to get miles)
+    var dLat = (lat2-lat1) * Math.PI / 180;
+    var dLon = (lon2-lon1) * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180 ) * Math.cos(lat2 * Math.PI / 180 ) *
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    console.log(d);
+    if (d>1) return Math.round(d*10)/10+"km";
+    else if (d<=1) return Math.round(d*1000)+"m";
+    return d;
+  }
+
+  function getMerchantSearch(){
     var vars = {};
     vars["merchant"]="";
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-        var val = value.replace("%27", "'");
-        vars[key] = val;
+        value = value.replace("%27", "'");
+        value = value.replace("%20", " ");
+        vars[key] = value;
     });
     return vars;
   }
 
 </script>
 </head>
-<body onload="buildUI(getMerchantName()['merchant'])">
+<body onload="buildUI(getMerchantSearch()['merchant'])" style="margin: 10px;">
  <div id="content">
   <h1>Merchant Feed</h1>
-  <div id="search-form">
-    <form action="/search" method="GET">
-      Search Merchant <input name="merchant" placeholder="Name/Location" required>
-      <input type="submit" value="Submit">
-    </form>
-  </div>
+  <form action="/search" method="POST">
+    Search Merchant <input name="merchant" placeholder="Name/Location" required>
+    <input type="submit" value="Submit">
+  </form>
+  <button onclick="buildUI('')">View All</button>
   <hr/>
   <div id="message-container">Loading...</div>
  </div>
+ 
 </body>
 </html>
