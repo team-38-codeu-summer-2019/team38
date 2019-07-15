@@ -18,12 +18,14 @@
 <script>
     
   // Fetch messages and add them to the page.
-  function fetchMerchants(){
+  function fetchMerchants(merchantSearch){
     let merchants = [];
     merchObj1 = {"id":"123123","cafe":"McDonald's","name":"McDonald's","location":"2/F ABC Building, Centennial Campus","distance_meters":50,"cuisine":"Western"};
     merchObj2 = {"id":"789789","cafe":"Swire Canteen","name":"Ebeneezer's","location":"5/F Computing Building, Main Campus","distance_meters":100,"cuisine":"Indian"};
+    merchObj3 = {"id":"567567","cafe":"ABC Canteen","name":"Domino's Pizza","location":"3/F Business Building, Main Campus","distance_meters":20,"cuisine":"Western"};
     merchants.push(merchObj1);
     merchants.push(merchObj2);
+    merchants.push(merchObj3);
     // const url = '/merchants';
     // fetch(url).then((response) => {
     //   return response.json();
@@ -35,9 +37,13 @@
       else{
         merchantContainer.innerHTML = '';  
       }
+      merchants.sort((a,b) => a.distance_meters - b.distance_meters); //sort by nearest distance
       merchants.forEach((merchant) => {  
-       const merchantDiv = buildMerchantDiv(merchant);
-       merchantContainer.appendChild(merchantDiv);
+       console.log(merchant.name+" "+merchantSearch);
+       if( (merchant.name.includes(merchantSearch)) || (merchant.location.includes(merchantSearch)) || (merchantSearch=="") ) {
+        const merchantDiv = buildMerchantDiv(merchant);
+        merchantContainer.appendChild(merchantDiv);
+       }
       });
     // });
   }
@@ -74,17 +80,29 @@
   }
   
   // Fetch data and populate the UI of the page.
-  function buildUI(){
-   fetchMerchants();
+  function buildUI(merchant){
+    console.log(merchant);
+   fetchMerchants(merchant);
   }
+
+  function getMerchantName(){
+    var vars = {};
+    vars["merchant"]="";
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        var val = value.replace("%27", "'");
+        vars[key] = val;
+    });
+    return vars;
+  }
+
 </script>
 </head>
-<body onload="buildUI()">
+<body onload="buildUI(getMerchantName()['merchant'])">
  <div id="content">
   <h1>Merchant Feed</h1>
   <div id="search-form">
     <form action="/search" method="GET">
-      Search <input name="merchant" placeholder="Merchant Name" required>
+      Search Merchant <input name="merchant" placeholder="Name/Location" required>
       <input type="submit" value="Submit">
     </form>
   </div>
