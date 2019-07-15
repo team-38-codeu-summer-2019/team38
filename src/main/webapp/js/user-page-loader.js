@@ -80,11 +80,14 @@ function fetchAboutMe() {
         universityInput.value = responseJson.university;
         const aboutMeInput = document.getElementsByName('about-me')[0];
         aboutMeInput.value = responseJson.aboutMe;
-        
+
+        if (responseJson.university == '') {
+          responseJson.university = 'This user has not entered their university yet.';
+        }
         const universityContainer = document.getElementById('university-container');
         universityContainer.innerHTML = responseJson.university;
         if (responseJson.aboutMe == '') {
-          responseJson.aboutMe = 'This user has not entered any information yet.';
+          responseJson.aboutMe = 'This user has not entered their about me yet.';
         }
         const aboutMeContainer = document.getElementById('about-me-container');
         aboutMeContainer.innerHTML = responseJson.aboutMe;
