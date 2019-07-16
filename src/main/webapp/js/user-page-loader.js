@@ -38,13 +38,13 @@ function showMessageFormIfViewingSelf() {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn &&
-            loginStatus.username == parameterUsername) {
+        if (loginStatus.isLoggedIn && loginStatus.username == parameterUsername) {
+          const aboutMeForm = document.getElementById('about-me-form');
+          aboutMeForm.classList.remove('hidden');
           const messageForm = document.getElementById('message-form');
           messageForm.classList.remove('hidden');
         }
       });
-      document.getElementById('about-me-form').classList.remove('hidden');
 }
 
 /** Fetches messages and add them to the page. */
