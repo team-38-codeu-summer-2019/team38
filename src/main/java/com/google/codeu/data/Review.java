@@ -4,9 +4,8 @@ import java.util.UUID;
 
 // TODO: add field for  image
 public class Review {
-    private UUID id;
-    private String user;
-    private String merchant;
+    private String userEmail;
+    private UUID merchantID;
     private String text;
     private long rating;
     private long timestamp;
@@ -17,27 +16,26 @@ public class Review {
      * {@code rating}.
      * Generates a random ID and uses the current system time for the creation time.
      */
-    public Review(String user, String merchant, String text, long rating) {
-        this(UUID.randomUUID(), user, merchant, text, rating,  System.currentTimeMillis());
+    public Review(String userEmail, UUID merchantID, String text, long rating) {
+        this(userEmail, merchantID, text, rating,  System.currentTimeMillis());
     }
 
-    public Review(UUID id, String user, String merchant, String text, long rating, long timestamp) {
-        this.id = id;
-        this.user = user;
-        this.merchant = merchant;
+    public Review(String userEmail, UUID merchantID, String text, long rating, long timestamp) {
+        this.userEmail = userEmail;
+        this.merchantID = merchantID;
         this.text = text;
         this.rating = rating;
         this.timestamp = timestamp;
     }
 
-    public UUID getId() { return id; }
+    public String getID() { return userEmail + "," + merchantID.toString(); }
 
-    public String getUser() {
-        return user;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public String getMerchant() {
-        return merchant;
+    public UUID getMerchantID() {
+        return merchantID;
     }
 
     public String getText() {

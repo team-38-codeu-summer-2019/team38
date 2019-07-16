@@ -41,9 +41,9 @@ public class Datastore {
 
   /** Stores the Review in Datastore. */
   public void storeReview(Review review) {
-    Entity reviewEntity = new Entity("Review", review.getId().toString());
-    reviewEntity.setProperty("user", review.getUser());
-    reviewEntity.setProperty("merchant", review.getMerchant());
+    Entity reviewEntity = new Entity("Review", review.getID());
+    reviewEntity.setProperty("userEmail", review.getUserEmail());
+    reviewEntity.setProperty("merchantID", review.getMerchantID());
     reviewEntity.setProperty("text", review.getText());
     reviewEntity.setProperty("rating", review.getRating());
     reviewEntity.setProperty("timestamp", review.getTimestamp());
@@ -57,24 +57,22 @@ public class Datastore {
    * @return a list of reviews posted to a merchant, or empty list if the merchant haven't been reviewed.
    * List is sorted by time descending.
    */
-  public List<Review> getReviews(String merchant) {
+  public List<Review> getReviews(UUID merchantID) {
     List<Review> reviews = new ArrayList<>();
 
     Query query = new Query("Review")
-            .setFilter(new Query.FilterPredicate("merchant", FilterOperator.EQUAL, merchant))
+            .setFilter(new Query.FilterPredicate("merchantID", FilterOperator.EQUAL, merchantID))
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
       try {
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String user = (String) entity.getProperty("user");
+        String userEmail = (String) entity.getProperty("userEmail");
         String text = (String) entity.getProperty("text");
         long rating = (long) entity.getProperty("rating");
         long timestamp = (long) entity.getProperty("timestamp");
 
-        Review review = new Review(id, user, merchant, text, rating, timestamp);
+        Review review = new Review(userEmail, merchantID, text, rating, timestamp);
         reviews.add(review);
       } catch (Exception e) {
         System.err.println("Error reading review.");

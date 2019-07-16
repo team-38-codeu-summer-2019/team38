@@ -2,17 +2,21 @@
 
 // Get ?merchant=XYZ parameter value
 const urlParams = new URLSearchParams(window.location.search);
-const parameterMerchant = urlParams.get('merchant');
-
+const parameterMerchantID = urlParams.get('merchantID');
+const merchantName = getMerchantName(parameterMerchantID);
 // URL must include ?merchant=XYZ parameter. If not, redirect to homepage.
-if (!parameterMerchant) {
+if (!parameterMerchantID) {
   window.location.replace('/');
 }
 
+function getMerchantName(merchantID) {
+    // TODO: change this to query from server
+    return merchantID
+}
 /** Sets the page title based on the URL parameter username. */
 function setPageTitle() {
-  document.getElementById('page-title').innerText = parameterMerchant;
-  document.title = parameterMerchant + ' - Review';
+  document.getElementById('page-title').innerText = merchantName;
+  document.title = merchantName + ' - Review';
 }
 
 /**
@@ -31,10 +35,9 @@ function showReviewFormIfLogin() {
       });
 }
 
-
 /** Fetches messages and add them to the page. */
 function fetchReviews() {
-  const url = '/reviews?merchant=' + parameterMerchant;
+  const url = '/reviews?merchantID=' + parameterMerchantID;
   fetch(url)
       .then((response) => {
         return response.json();
@@ -114,7 +117,7 @@ function buildReviewDiv(review) {
 
 // set merchant name in all hidden input forms
 function setMerchantInput() {
-    document.getElementById('merchant-input').value = parameterMerchant
+    document.getElementById('merchant-input').value = parameterMerchantID
 }
 
 /** Fetches data and populates the UI of the page. */

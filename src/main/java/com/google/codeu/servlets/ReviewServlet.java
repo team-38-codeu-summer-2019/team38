@@ -2,6 +2,7 @@ package com.google.codeu.servlets;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,15 +39,15 @@ public class ReviewServlet extends HttpServlet {
 
         response.setContentType("application/json");
 
-        String merchant = request.getParameter("merchant");
+        UUID merchantID = UUID.fromString(request.getParameter("merchantID"));
 
-        if (merchant == null || merchant.equals("")) {
+        if (merchantID == null || merchantID.equals("")) {
             // Request is invalid, return empty array
             response.getWriter().println("[]");
             return;
         }
 
-        List<Review> reviews = datastore.getReviews(merchant);
+        List<Review> reviews = datastore.getReviews(merchantID);
         Gson gson = new Gson();
         String json = gson.toJson(reviews);
 
@@ -65,8 +66,8 @@ public class ReviewServlet extends HttpServlet {
             return;
         }
 
-        String user = userService.getCurrentUser().getEmail();
-        String merchant = request.getParameter("merchant");
+        String userEmail = userService.getCurrentUser().getEmail();
+        UUID merchantID = UUID.fromString(request.getParameter("merchant"));
         String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
         int rating = Integer.parseInt(request.getParameter("rating"));
 
@@ -75,10 +76,10 @@ public class ReviewServlet extends HttpServlet {
         String replacement = "<img src=\"$1\" />";
         String textWithImagesReplaced = text.replaceAll(regex, replacement);
 
-        Review review = new Review(user, merchant, textWithImagesReplaced, rating);
+        Review review = new Review(userEmail, merchantID, textWithImagesReplaced, rating);
         datastore.storeReview(review);
 
         // TODO: change this to info page of a merchant.
-        response.sendRedirect("/review.html?merchant=" + merchant);
+        response.sendRedirect("/review.html?merchant=" + merchantID);
     }
 }
