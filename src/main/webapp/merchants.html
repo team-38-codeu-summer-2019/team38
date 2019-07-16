@@ -14,15 +14,77 @@
           merchantContainer.innerHTML = '';
 
           const imgElement = buildImageElement(merchant.image);
+          imgElement.classList.add("merchant-img");
           merchantContainer.appendChild(imgElement);
+
+          const merchantDesc = buildMerchantDescription(merchant);
+          merchantContainer.appendChild(merchantDesc)
+
+
         })
       }
 
       function buildImageElement(image){
         const imgElement = document.createElement('img');
         imgElement.setAttribute('src', image);
+        
         return imgElement;
       }
+
+      function buildMerchantDescription(merchant) {
+        const merchantDesc = document.createElement('div');
+
+        const locationEl = document.createElement('p');
+        locationEl.innerHTML = 'Location: ' + merchant.getLocation();
+        merchantDesc.appendChild(locationEl)
+
+        const cuisineEl = document.createElement('p');
+        cuisineEl.innerHTML = 'Cuisine: ' + merchant.getCuisine();
+        merchantDesc.appendChild(cuisineEl)
+
+        const priceRangeEl = document.createElement('p');
+        priceRangeEl.innerHTML = 'Price range: ';
+        merchantDesc.appendChild(priceRangeEl)
+
+        const paymentEl = document.createElement('p');
+        paymentEl.innerHTML = 'Payment options: ' + merchant.getPaymentOptions();
+        merchantDesc.appendChild(paymentEl)
+
+        return merchantDesc
+      }
+
+      function fetchMenus(merchantId) {
+        const url = '/menus?merchantId=' + merchantId;
+        fetch(url).then((response) => {
+          return response.json();
+        }).then((menus) => {
+          const menuContainer = document.getElementById('menus');
+          menuContainer.innerHTML = ''
+
+          for(menu in menus) {
+            const menuDiv = document.createElement('div');
+
+            const H4 = document.createElement('h4');
+            H4.innerHTML = menu.getName();
+            menuDiv.appendChild(H4)
+
+            const imgElement = buildImageElement(menu.getImage());
+            imgElement.classList.add("merchant-img");
+            imgElement.appendChild(imgElement);
+
+            const priceElement = document.createElement('p');
+            priceElement.innerHTML = 'Price: ' + menu.getPrice();
+            menuDiv.appendChild(priceElement)
+
+            const descElement = document.createElement('p');
+            descElement.innerHTML = 'Description: ' + menu.getDescription();
+            menuDiv.appendChild(descElement)
+
+            menuContainer.appendChild(menuDiv)
+          }
+        })
+      }
+
     </script>
   </head>
   <body>
@@ -35,18 +97,17 @@
 
     <h2>{ name }</h2>
     <div class="merchant-container">
-      <div class="merchant-photo left">
+      <div class="merchant-photo">
           <img 
             class="merchant-img"
             src="https://previews.123rf.com/images/onblast/onblast1704/onblast170400051/76988297-traditional-wooden-market-food-stall-full-of-groceries-products-with-flags-crates-and-chalk-board-.jpg"
           />
       </div>
-      <div class="merchant-desc right">
+      <div class="merchant-desc">
         <p>Location: { location }</p>
         <p>Cuisine: { type of cuisine }</p>
         <p>Price range: { price range }</p>
         <p>Payment options: { payment options }</p>
-        <p>Crowded: { crowdedness }</p>
       </div>
     </div>
 
