@@ -36,7 +36,24 @@ limitations under the License.
     <form action="/add-merchant" method="POST">
       <h4>Enter a new merchant:</h4>
       Name: <input name="name" type="text"><br>
-      Cuisine: <input name="cuisine" type="text"><br>
+      Cuisine: <select name="cuisine">
+          <option value="American">American</option>
+          <option value="British">British</option>
+          <option value="Chinese">Chinese</option>
+          <option value="French">French</option>
+          <option value="Greek">Greek</option>
+          <option value="Indian">Indian</option>
+          <option value="Indonesian">Indonesian</option>
+          <option value="Italian">Italian</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Korean">Korean</option>
+          <option value="Malaysian">Malaysian</option>
+          <option value="Mexican">Mexican</option>
+          <option value="Spanish">Spanish</option>
+          <option value="Thai">Thai</option>
+          <option value="Vietnamese">Vietnamese</option>
+          <option value="Western">Western</option>
+      </select><br>
       Location: <input name="location" type="text"><br>
       Latitude: <input name="latitude" type="text"><br>
       Longitude: <input name="longitude" type="text">
