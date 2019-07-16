@@ -1,0 +1,16 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.merchant-info {
+  display: flex;
+}
+
+.merchant-img {
+  width: 300px;
+}
+
+.menu-img {
+  width: 100px;
+}
