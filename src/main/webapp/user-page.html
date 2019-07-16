@@ -21,10 +21,13 @@ limitations under the License.
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="/js/navigation-loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="/js/user-page-loader.js"></script>
-    <script src="/js/text-to-speech.js"></script>
   </head>
-  <body onload="buildUI();">
+  <body onload="buildUI();" style="margin: 10px;">
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
@@ -33,11 +36,15 @@ limitations under the License.
     </nav>
     <h1 id="page-title">User Page</h1>
 
-    <div id="about-me-container">Loading...</div>
+    <div id="university-container">Loading...</div><br/>
+    <div id="about-me-container">Loading...</div><br/>
     <div id="about-me-form" class="hidden">
       <form action="/about" method="POST">
-        <textarea name="about-me" placeholder="about me" rows=4 required></textarea>
+        University:<br/>
+        <input type="text" name="university" placeholder="university"></input><br/>
         <br/>
+        About Me:<br/>
+        <textarea name="about-me" placeholder="about me" rows=4></textarea><br/>
         <input type="submit" value="Submit">
       </form>
     </div>
@@ -52,28 +59,7 @@ limitations under the License.
     </form>
     <br/>
 
-    Enter message to be played:
-    <br/>
-    <textarea name="text" id="tts-input"></textarea>
-    <br/>
-    <button onclick="f()">Play</button>
-    <audio id="audio-"></audio>
-    <hr/>
-
-    <div id="stt">
-      <button id="record-stt">Record</button>
-      <button id="stop-stt">Stop</button>
-      <button id="submit-stt">Submit</button>
-      <div>
-        <audio id="audio-stt"></audio>
-        <div>
-          <textarea id="output-stt" readonly></textarea>
-        </div>
-      </div>
-    </div>
-
     <div id="message-container">Loading...</div>
 
   </body>
-  <script src="/js/record.js"></script>
 </html>
