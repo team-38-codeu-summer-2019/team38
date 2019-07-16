@@ -78,7 +78,7 @@ public class ReviewServlet extends HttpServlet {
         Review review = new Review(user, merchant, textWithImagesReplaced, rating);
         datastore.storeReview(review);
 
-        // TODO: change this to review page of a merchant.
+        // TODO: change this to info page of a merchant.
         response.sendRedirect("/review.html?merchant=" + merchant);
     }
 }
