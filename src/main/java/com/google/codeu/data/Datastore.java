@@ -193,5 +193,44 @@ public class Datastore {
     return merchants;
   }
 
+  /** Stores the Merchant in Datastore. */
+  public void storeMerchant(Menu menu) {
+    Entity menuEntity = new Entity("Menu", menu.getId().toString());
+    menuEntity.setProperty("name", menu.getName());
+    menuEntity.setProperty("image", menu.getImage());
+    menuEntity.setProperty("description", menu.getDescription());
+    menuEntity.setProperty("price", menu.getPrice());
+    menuEntity.setProperty("merchantId", menu.getMerchantId().toString());
+
+    datastore.put(menuEntity);
+  }
+
+  public List<Menu> getAllMenus(String merchantId) {
+    List<Menu> menus = new ArrayList<>();
+    
+    Query query = new Query("Menu").setFilter(new Query.FilterPredicate("merchantId", FilterOperator.EQUAL, merchantId));;
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        String idString = entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
+        String name = (String) entity.getProperty("name");
+        String image = (String) entity.getProperty("image"); 
+        String description = (String) entity.getProperty("description");
+        long price = (long) entity.getProperty("price");
+        UUID idMerchant = UUID.fromString(merchantId);
+
+        Menu menu = new Menu(id, name, image, description, price, idMerchant);
+        menus.add(menu);
+      } catch (Exception e) {
+        System.err.println("Error reading menu.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return menus;
+  }
 
 }
