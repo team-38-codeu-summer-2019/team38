@@ -3,7 +3,7 @@ package com.google.codeu.data;
 public class User {
 
     private String email;
-    private long university;
+    private long university = -1;
     private String aboutMe;
 
     public User(String email, long university, String aboutMe) {

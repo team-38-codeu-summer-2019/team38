@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
+import com.google.codeu.data.University;
 import com.google.codeu.data.User;
 import com.google.gson.JsonObject;
 import org.jsoup.Jsoup;
@@ -39,7 +40,8 @@ public class AboutMeServlet extends HttpServlet {
 
         JsonObject jsonObject = new JsonObject();
 
-        jsonObject.addProperty("university", "");
+        jsonObject.addProperty("universityID", -1);
+        jsonObject.addProperty("universityName", "");
         jsonObject.addProperty("aboutMe", "");
 
         String user = request.getParameter("user");
@@ -52,13 +54,19 @@ public class AboutMeServlet extends HttpServlet {
 
         User userData = datastore.getUser(user);
 
-        if (userData == null || userData.getUniversity() == null && userData.getAboutMe() == null) {
+        if (userData == null || userData.getUniversity() == -1 && userData.getAboutMe() == null) {
             response.getWriter().println(jsonObject.toString());
             return;
         }
 
-        jsonObject.addProperty("university", userData.getUniversity());
-        jsonObject.addProperty("aboutMe", userData.getAboutMe());
+        long universityID = userData.getUniversity();
+        University university = datastore.getUniversity(universityID);
+        String universityName = university.getName();
+        String aboutMe = userData.getAboutMe();
+
+        jsonObject.addProperty("universityID", universityID);
+        jsonObject.addProperty("universityName", universityName);
+        jsonObject.addProperty("aboutMe", aboutMe);
 
         response.getWriter().println(jsonObject.toString());
     }
@@ -74,11 +82,19 @@ public class AboutMeServlet extends HttpServlet {
         }
 
         String userEmail = userService.getCurrentUser().getEmail();
-        String university = Jsoup.clean(request.getParameter("university"), Whitelist.none());
+        long university = Long.parseLong(request.getParameter("university"));
         String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
 
         User user = new User(userEmail, university, aboutMe);
         datastore.storeUser(user);
+
+        /* to add University to Datastore
+        University a = new University(1, "National University of Singapore");
+        University b = new University(2, "Universitas Indonesia");
+        University c = new University(3, "The University of Hongkong");
+        datastore.storeUniversity(a);
+        datastore.storeUniversity(b);
+        datastore.storeUniversity(c);*/
 
         response.sendRedirect("/user-page.html?user=" + userEmail);
     }
