@@ -139,17 +139,68 @@ public class Datastore {
    */
   public User getUser(String email) {
 
-    Query query = new Query("User").setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+    Query query = new Query("User")
+            .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
     if (userEntity == null) {
       return null;
     }
 
-    String university = (String) userEntity.getProperty("university");
+    long university = (long)userEntity.getProperty("university");
     String aboutMe = (String) userEntity.getProperty("aboutMe");
     User user = new User(email, university, aboutMe);
 
     return user;
+  }
+
+  /** Stores the University in Datastore. */
+  public void storeUniversity(University university) {
+    Entity universityEntity = new Entity("University", university.getID());
+    universityEntity.setProperty("ID", university.getID());
+    universityEntity.setProperty("name", university.getName());
+    datastore.put(universityEntity);
+  }
+
+  /** Returns a list of supported universities. */
+  public List<University> getUniversities() {
+    List<University> universities = new ArrayList<>();
+
+    Query query = new Query("University")
+            .addSort("ID", SortDirection.ASCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        long ID = (long) entity.getProperty("ID");
+        String name = (String) entity.getProperty("name");
+
+        University university = new University(ID, name);
+        universities.add(university);
+      } catch (Exception e) {
+        System.err.println("Error loading universities.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return universities;
+  }
+
+  /** Returns University by ID */
+  public University getUniversity(long ID) {
+
+    Query query = new Query("University")
+            .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, ID));
+    PreparedQuery results = datastore.prepare(query);
+    Entity universityEntity = results.asSingleEntity();
+    if (universityEntity == null) {
+      return null;
+    }
+
+    String name = (String) universityEntity.getProperty("name");
+    University university = new University(ID, name);
+
+    return university;
   }
 }
