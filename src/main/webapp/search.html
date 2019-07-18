@@ -40,7 +40,12 @@
        console.log(merchant.name+" "+merchantSearch);
        if( (merchant.name.toLowerCase().includes(merchantSearch.toLowerCase())) || (merchant.location.toLowerCase().includes(merchantSearch.toLowerCase())) || (merchantSearch=="") ) {
         const merchantDiv = buildMerchantDiv(merchant);
-        merchantContainer.appendChild(merchantDiv);
+
+        const linkEl = document.createElement('a');
+        linkEl.setAttribute('href', '/merchants.html?id='+ merchant.id)
+        linkEl.appendChild(merchantDiv)
+
+        merchantContainer.appendChild(linkEl);
         count++;
        }
       });
