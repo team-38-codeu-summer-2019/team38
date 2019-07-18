@@ -41,21 +41,18 @@ public class AddMerchantServlet extends HttpServlet {
     datastore = new Datastore();
   }
 
-//   /**
-//    * Responds with a JSON representation of {@link Message} data for a specific user. Responds with
-//    * an empty array if the user is not provided.
-//    */
-//   @Override
-//   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-//     response.setContentType("application/json");
+    response.setContentType("application/json");
 
-//     List<Merchant> merchants = datastore.getAllMerchants();
-//     Gson gson = new Gson();
-//     String json = gson.toJson(merchants);
-
-//     response.getWriter().println(json);
-//   }
+    String merchantId = Jsoup.clean(request.getParameter("url"), Whitelist.none()).split("=")[1];
+    Merchant merchant = datastore.getMerchant(merchantId);
+    Gson gson = new Gson();
+    String json = gson.toJson(merchant);
+    
+    response.getWriter().println(json);
+  }
 
   /** Stores a new {@link Message}. */
   @Override
