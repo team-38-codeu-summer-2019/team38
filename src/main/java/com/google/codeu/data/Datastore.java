@@ -205,6 +205,27 @@ public class Datastore {
     datastore.put(menuEntity);
   }
 
+  public Merchant getMerchant(String id) {
+
+    Query query = new Query("Merchant").setFilter(new Query.FilterPredicate("id", FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    if (entity == null) {
+      return null;
+    }
+
+    String name = (String) entity.getProperty("name");
+    String cuisine = (String) entity.getProperty("cuisine");
+    String location = (String) entity.getProperty("location");
+    double latitude = (double) entity.getProperty("latitude");
+    double longitude = (double) entity.getProperty("longitude");
+    UUID idMerchant = UUID.fromString(id);
+
+    Merchant merchant = new Merchant(idMerchant, name, cuisine, latitude, longitude, location);
+
+    return merchant;
+  }
+
   public List<Menu> getAllMenus(String merchantId) {
     List<Menu> menus = new ArrayList<>();
     
