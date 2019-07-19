@@ -3,12 +3,28 @@ body {
   margin: 0;
 }
 
+#merchant-name {
+  margin: 2px;
+}
+
+#merchant-container {
+  border: 3px solid #45484d;
+  padding: 5px;
+  margin: 2px;
+}
+
 .merchant-info {
   display: flex;
 }
 
 .merchant-img {
   width: 300px;
+}
+
+.menu {
+  border: 1px solid #7b8392;
+  padding: 5px;
+  margin: 2px;
 }
 
 .menu-img {

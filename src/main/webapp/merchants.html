@@ -77,9 +77,14 @@
           const menuContainer = document.getElementById('menus');
           menuContainer.innerHTML = ''
 
+          const H3 = document.createElement('h3');
+          const h3Node = document.createTextNode('Menu');
+          H3.appendChild(h3Node);
+          menuContainer.appendChild(H3)
+
           menus.forEach((menu) => {
-            console.log(menu);
             const menuDiv = document.createElement('div');
+            menuDiv.classList.add("menu");
 
             const H4 = document.createElement('h4');
             const h4Node = document.createTextNode(menu.name);
@@ -125,7 +130,7 @@
     </script>
   </head>
 
-  <body>
+  <body onload="buildUI()">
 
     <h2 id="merchant-name"></h2>
     <div id="merchant-container"></div>
