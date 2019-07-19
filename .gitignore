@@ -5,6 +5,8 @@ target
 .idea
 *.iml
 .DS_Store
+.factorypath
+.vscode/
 
 # service account key
 su19-codeu-38-6755*.json

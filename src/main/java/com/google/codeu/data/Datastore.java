@@ -173,6 +173,7 @@ public class Datastore {
   public void storeUser(User user) {
     Entity userEntity = new Entity("User", user.getEmail());
     userEntity.setProperty("email", user.getEmail());
+    userEntity.setProperty("university", user.getUniversity());
     userEntity.setProperty("aboutMe", user.getAboutMe());
     datastore.put(userEntity);
   }
@@ -183,16 +184,110 @@ public class Datastore {
    */
   public User getUser(String email) {
 
-    Query query = new Query("User").setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+    Query query = new Query("User")
+            .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
     if (userEntity == null) {
       return null;
     }
 
+    long university = (long)userEntity.getProperty("university");
     String aboutMe = (String) userEntity.getProperty("aboutMe");
-    User user = new User(email, aboutMe);
+    User user = new User(email, university, aboutMe);
 
     return user;
   }
+
+  /** Stores the University in Datastore. */
+  public void storeUniversity(University university) {
+    Entity universityEntity = new Entity("University", university.getID());
+    universityEntity.setProperty("ID", university.getID());
+    universityEntity.setProperty("name", university.getName());
+    datastore.put(universityEntity);
+  }
+
+  /** Returns a list of supported universities. */
+  public List<University> getUniversities() {
+    List<University> universities = new ArrayList<>();
+
+    Query query = new Query("University")
+            .addSort("ID", SortDirection.ASCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        long ID = (long) entity.getProperty("ID");
+        String name = (String) entity.getProperty("name");
+
+        University university = new University(ID, name);
+        universities.add(university);
+      } catch (Exception e) {
+        System.err.println("Error loading universities.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return universities;
+  }
+
+  /** Returns University by ID */
+  public University getUniversity(long ID) {
+
+    Query query = new Query("University")
+            .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, ID));
+    PreparedQuery results = datastore.prepare(query);
+    Entity universityEntity = results.asSingleEntity();
+    if (universityEntity == null) {
+      return null;
+    }
+
+    String name = (String) universityEntity.getProperty("name");
+    University university = new University(ID, name);
+
+    return university;
+  }
+
+  /** Stores the Merchant in Datastore. */
+  public void storeMerchant(Merchant merchant) {
+    Entity merchantEntity = new Entity("Merchant", merchant.getId().toString());
+    merchantEntity.setProperty("name", merchant.getName());
+    merchantEntity.setProperty("cuisine", merchant.getCuisine());
+    merchantEntity.setProperty("location", merchant.getLocation());
+    merchantEntity.setProperty("latitude", merchant.getLatitude());
+    merchantEntity.setProperty("longitude", merchant.getLongitude());
+
+    datastore.put(merchantEntity);
+  }
+
+  public List<Merchant> getAllMerchants() {
+    List<Merchant> merchants = new ArrayList<>();
+
+    Query query = new Query("Merchant");
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        String idString = entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
+        String name = (String) entity.getProperty("name");
+        String cuisine = (String) entity.getProperty("cuisine");
+        String location = (String) entity.getProperty("location");
+        double latitude = (double) entity.getProperty("latitude");
+        double longitude = (double) entity.getProperty("longitude");
+
+        Merchant merchant = new Merchant(id, name, cuisine, latitude, longitude, location);
+        merchants.add(merchant);
+      } catch (Exception e) {
+        System.err.println("Error reading merchant.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return merchants;
+  }
+
+
 }

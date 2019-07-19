@@ -38,13 +38,76 @@ function showMessageFormIfViewingSelf() {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn &&
-            loginStatus.username == parameterUsername) {
+        if (loginStatus.isLoggedIn && loginStatus.username == parameterUsername) {
+          const aboutMeForm = document.getElementById('about-me-form');
+          aboutMeForm.classList.remove('hidden');
           const messageForm = document.getElementById('message-form');
           messageForm.classList.remove('hidden');
         }
       });
-      document.getElementById('about-me-form').classList.remove('hidden');
+}
+
+var universities;
+
+/** Fetches university options. */
+function fetchUniversities() {
+  const url = '/university';
+  fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseJson) => {
+        universities = responseJson;
+      })
+      .then(() => {
+        fetchAboutMe();
+      })
+      .then(() => {
+        updateUniversities();
+      })
+}
+
+/** Updates university options. */
+function updateUniversities() {
+  const universityInput = document.getElementsByName('university')[0];
+  for (i = universityInput.options.length - 1; i; i--) {
+    universityInput.remove(i);
+  }
+  if (typeof universities !== "undefined") {
+    universities.forEach(function (university) {
+      let ID = university.ID;
+      let name = university.name;
+      let len = universityInput.options.length;
+      universityInput.options[len] = new Option(name, ID);
+    })
+  }
+}
+
+/** Fetches About Me. */
+function fetchAboutMe() {
+  const url = '/about?user=' + parameterUsername;
+  fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseJson) => {
+        const universityInput = document.getElementsByName('university')[0];
+        if (responseJson.universityID == -1) {
+          responseJson.universityID = 'This user has not entered their university yet.';
+        }else{
+          universityInput.value = responseJson.universityID;
+        }
+        const universityContainer = document.getElementById('university-container');
+        universityContainer.innerHTML = responseJson.universityName;
+
+        const aboutMeInput = document.getElementsByName('about-me')[0];
+        aboutMeInput.value = responseJson.aboutMe;
+        if (responseJson.aboutMe == '') {
+          responseJson.aboutMe = 'This user has not entered their about me yet.';
+        }
+        const aboutMeContainer = document.getElementById('about-me-container');
+        aboutMeContainer.innerHTML = responseJson.aboutMe;
+      });
 }
 
 /** Fetches messages and add them to the page. */
@@ -65,22 +128,6 @@ function fetchMessages() {
           const messageDiv = buildMessageDiv(message);
           messagesContainer.appendChild(messageDiv);
         });
-      });
-}
-
-/** Fetches About Me. */
-function fetchAboutMe() {
-  const url = '/about?user=' + parameterUsername;
-  fetch(url)
-      .then((response) => {
-        return response.text();
-      })
-      .then((aboutMe) => {
-        const aboutMeContainer = document.getElementById('about-me-container');
-        if (aboutMe == '') {
-          aboutMe = 'This user has not entered any information yet.';
-        }
-        aboutMeContainer.innerHTML = aboutMe;
       });
 }
 
@@ -111,6 +158,6 @@ function buildMessageDiv(message) {
 function buildUI() {
   setPageTitle();
   showMessageFormIfViewingSelf();
+  fetchUniversities();
   fetchMessages();
-  fetchAboutMe();
 }
