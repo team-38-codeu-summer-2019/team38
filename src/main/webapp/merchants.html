@@ -2,32 +2,125 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>{ name }</title>
+    <title>Merchant Detail</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/merchants.css">
     <link rel="stylesheet" href="/css/review.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="/js/navigation-loader.js"></script>
     <script type="text/javascript">
       function fetchMerchant(id) {
-        const url = '/merchants?id=' + id
+        const url = '/add-merchant?id=' + id
         fetch(url).then((response) => {
           return response.json();
         }).then((merchant) => {
+          const merchantName = document.getElementById('merchant-name');
+          const nameNode = document.createTextNode(merchant.name);
+          merchantName.appendChild(nameNode);
+
           const merchantContainer = document.getElementById('merchant-container');
           merchantContainer.innerHTML = '';
 
-          const imgElement = buildImageElement(merchant.image);
-          merchantContainer.appendChild(imgElement);
+          if (merchant.image != null) {
+            const imgElement = buildImageElement(merchant.image);
+            imgElement.classList.add("merchant-img");
+            merchantContainer.appendChild(imgElement);
+          }
+          
+          const merchantDesc = buildMerchantDescription(merchant);
+          merchantContainer.appendChild(merchantDesc)
+
+          const linkEl = document.createElement('a');
+          const node = document.createTextNode("Add new menu");
+          linkEl.appendChild(node);
+          linkEl.setAttribute('href', '/add-menu.html?merchantId='+ merchant.id)
+          merchantContainer.appendChild(linkEl)
         })
       }
 
       function buildImageElement(image){
         const imgElement = document.createElement('img');
         imgElement.setAttribute('src', image);
+        
         return imgElement;
       }
+
+      function buildMerchantDescription(merchant) {
+        const merchantDesc = document.createElement('div');
+
+        const locationEl = document.createElement('p');
+        const locNode = document.createTextNode('Location: ' + merchant.location);
+        locationEl.appendChild(locNode);
+        merchantDesc.appendChild(locationEl);
+
+        const cuisineEl = document.createElement('p');
+        const cuisineNode = document.createTextNode('Cuisine: ' + merchant.cuisine);
+        cuisineEl.appendChild(cuisineNode);
+        merchantDesc.appendChild(cuisineEl)
+
+        // const priceRangeEl = document.createElement('p');
+        // priceRangeEl.innerHTML = 'Price range: ';
+        // merchantDesc.appendChild(priceRangeEl)
+
+        // const paymentEl = document.createElement('p');
+        // paymentEl.innerHTML = 'Payment options: ' + merchant.payment;
+        // merchantDesc.appendChild(paymentEl)
+
+        return merchantDesc
+      }
+
+      function fetchMenus(merchantId) {
+        const url = '/menus?merchantId=' + merchantId;
+        fetch(url).then((response) => {
+          return response.json();
+        }).then((menus) => {
+          const menuContainer = document.getElementById('menus');
+          menuContainer.innerHTML = ''
+
+          const H3 = document.createElement('h3');
+          const h3Node = document.createTextNode('Menu');
+          H3.appendChild(h3Node);
+          menuContainer.appendChild(H3)
+
+          menus.forEach((menu) => {
+            const menuDiv = document.createElement('div');
+            menuDiv.classList.add("menu");
+
+            const H4 = document.createElement('h4');
+            const h4Node = document.createTextNode(menu.name);
+            H4.appendChild(h4Node);
+            menuDiv.appendChild(H4)
+
+            if (menu.image != null) {
+              const imgElement = buildImageElement(menu.image);
+              imgElement.classList.add("merchant-img");
+              menuDiv.appendChild(imgElement);
+            }
+
+            const priceElement = document.createElement('p');
+            const priceNode = document.createTextNode('Price: ' + menu.price);
+            priceElement.appendChild(priceNode);
+            menuDiv.appendChild(priceElement)
+
+            const descElement = document.createElement('p');
+            const descNode = document.createTextNode('Description: ' + menu.description);
+            descElement.appendChild(descNode);
+            menuDiv.appendChild(descElement)
+
+            menuContainer.appendChild(menuDiv)
+          })
+        })
+      }
+
+      function buildUI() {
+        const url = new URL(window.location.href)
+        const id = url.searchParams.get('id')
+        fetchMerchant(id)
+        fetchMenus(id)
+      }
+
     </script>
 
     <div id="nav-placeholder"></div>
@@ -38,36 +131,12 @@
       });
     </script>
   </head>
-  <body>
 
-    <h2>{ name }</h2>
-    <div class="merchant-container">
-      <div class="merchant-photo left">
-          <img 
-            class="merchant-img"
-            src="https://previews.123rf.com/images/onblast/onblast1704/onblast170400051/76988297-traditional-wooden-market-food-stall-full-of-groceries-products-with-flags-crates-and-chalk-board-.jpg"
-          />
-      </div>
-      <div class="merchant-desc right">
-        <p>Location: { location }</p>
-        <p>Cuisine: { type of cuisine }</p>
-        <p>Price range: { price range }</p>
-        <p>Payment options: { payment options }</p>
-        <p>Crowded: { crowdedness }</p>
-      </div>
-    </div>
+  <body onload="buildUI()">
 
-    <div class="menus">
-      <div class="menu">
-        <h4>{ name }</h4>
-        <img
-          class="menu-img"
-          src="https://images.blogthings.com/whatthanksgivingleftoversareyouquiz/plate-of-food.jpg"
-        />
-        <p>Price: { price }</p>
-        <p>Description: { desc }</p>
-      </div>
-    </div>
+    <h2 id="merchant-name"></h2>
+    <div id="merchant-container"></div>
+    <div id="menus"></div>
 
     <div id="review-placeholder"></div>
   </body>
