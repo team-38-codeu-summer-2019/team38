@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/review.css">
-    <script src="/js/review-loader.js"></script>
-</head>
-<body onload="buildUI()">
+
+<div>
     <h1 id="page-title">Review</h1>
 
     <div id="overall-rating-container">Loading...</div>
@@ -34,5 +26,7 @@
     <br/>
 
     <div id="reviews-container">Loading...</div>
-</body>
-</html>
+</div>
+
+<script src="/js/review-loader.js"></script>
+<script> buildReviewUI(); </script>

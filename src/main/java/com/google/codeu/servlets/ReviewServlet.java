@@ -39,9 +39,8 @@ public class ReviewServlet extends HttpServlet {
 
         response.setContentType("application/json");
 
-        UUID merchantID = UUID.fromString(request.getParameter("merchantID"));
-
-        if (merchantID == null || merchantID.equals("")) {
+        UUID merchantID = UUID.fromString(request.getParameter("id"));
+        if (merchantID.equals("")) {
             // Request is invalid, return empty array
             response.getWriter().println("[]");
             return;
@@ -80,6 +79,6 @@ public class ReviewServlet extends HttpServlet {
         datastore.storeReview(review);
 
         // TODO: change this to info page of a merchant.
-        response.sendRedirect("/review.html?merchant=" + merchantID);
+        response.sendRedirect("/merchants.html?id=" + merchantID);
     }
 }

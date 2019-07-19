@@ -41,9 +41,9 @@ public class Datastore {
 
   /** Stores the Review in Datastore. */
   public void storeReview(Review review) {
-    Entity reviewEntity = new Entity("Review", review.getID());
+    Entity reviewEntity = new Entity("Review", review.getID().toString());
     reviewEntity.setProperty("userEmail", review.getUserEmail());
-    reviewEntity.setProperty("merchantID", review.getMerchantID());
+    reviewEntity.setProperty("merchantID", review.getMerchantID().toString());
     reviewEntity.setProperty("text", review.getText());
     reviewEntity.setProperty("rating", review.getRating());
     reviewEntity.setProperty("timestamp", review.getTimestamp());
@@ -61,18 +61,19 @@ public class Datastore {
     List<Review> reviews = new ArrayList<>();
 
     Query query = new Query("Review")
-            .setFilter(new Query.FilterPredicate("merchantID", FilterOperator.EQUAL, merchantID))
+            .setFilter(new Query.FilterPredicate("merchantID", FilterOperator.EQUAL, merchantID.toString()))
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
       try {
+        UUID id = UUID.fromString(entity.getKey().getName());
         String userEmail = (String) entity.getProperty("userEmail");
         String text = (String) entity.getProperty("text");
         long rating = (long) entity.getProperty("rating");
         long timestamp = (long) entity.getProperty("timestamp");
 
-        Review review = new Review(userEmail, merchantID, text, rating, timestamp);
+        Review review = new Review(id, userEmail, merchantID, text, rating, timestamp);
         reviews.add(review);
       } catch (Exception e) {
         System.err.println("Error reading review.");

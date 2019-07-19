@@ -2,27 +2,31 @@
 
 // Get ?merchant=XYZ parameter value
 const urlParams = new URLSearchParams(window.location.search);
-const parameterMerchantID = urlParams.get('merchantID');
-const merchantName = getMerchantName(parameterMerchantID);
-// URL must include ?merchant=XYZ parameter. If not, redirect to homepage.
+const parameterMerchantID = urlParams.get('id');
+//const merchantName = getMerchantName(parameterMerchantID);
+// URL must include ?id=XYZ parameter. If not, redirect to homepage.
 if (!parameterMerchantID) {
-  window.location.replace('/');
+  window.location.replace('/search.html');
 }
 
-function getMerchantName(merchantID) {
-    // TODO: change this to query from server
-    return merchantID
-}
-/** Sets the page title based on the URL parameter username. */
-function setPageTitle() {
-  document.getElementById('page-title').innerText = merchantName;
-  document.title = merchantName + ' - Review';
-}
+//function getMerchantName(merchantID) {
+//    const url = '/merchants?id=' + id
+//    let response = await fetch(url)
+//    let json = await response.json()
+//
+//    return json.name
+//}
+/** [DEPRECATED] Sets the page title based on the URL parameter username. */
+//function setPageTitle() {
+//  document.getElementById('page-title').innerText = merchantName;
+//  document.title = merchantName + ' - Review';
+//}
 
 /**
  * Shows the review form if the user is logged in.
  */
 function showReviewFormIfLogin() {
+    console.log("here login check")
   fetch('/login-status')
       .then((response) => {
         return response.json();
@@ -37,7 +41,8 @@ function showReviewFormIfLogin() {
 
 /** Fetches messages and add them to the page. */
 function fetchReviews() {
-  const url = '/reviews?merchantID=' + parameterMerchantID;
+console.log("here fetch reviews")
+  const url = '/reviews?id=' + parameterMerchantID;
   fetch(url)
       .then((response) => {
         return response.json();
@@ -96,7 +101,7 @@ function buildReviewDiv(review) {
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('review-header');
   headerDiv.appendChild(document.createTextNode(
-      review.user + ' - ' + new Date(review.timestamp)));
+      review.userEmail + ' - ' + new Date(review.timestamp)));
 
   const ratingDiv = document.createElement('div');
   ratingDiv.classList.add('rating-body');
@@ -121,8 +126,8 @@ function setMerchantInput() {
 }
 
 /** Fetches data and populates the UI of the page. */
-function buildUI() {
-  setPageTitle();
+function buildReviewUI() {
+  // setPageTitle();
   showReviewFormIfLogin();
   fetchReviews();
   setMerchantInput();
