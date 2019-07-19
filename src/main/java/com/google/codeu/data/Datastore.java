@@ -39,6 +39,52 @@ public class Datastore {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
+  /** Stores the Review in Datastore. */
+  public void storeReview(Review review) {
+    Entity reviewEntity = new Entity("Review", review.getID().toString());
+    reviewEntity.setProperty("userEmail", review.getUserEmail());
+    reviewEntity.setProperty("merchantID", review.getMerchantID().toString());
+    reviewEntity.setProperty("text", review.getText());
+    reviewEntity.setProperty("rating", review.getRating());
+    reviewEntity.setProperty("timestamp", review.getTimestamp());
+
+    datastore.put(reviewEntity);
+  }
+
+  /**
+   * Gets reviews posted to a specific merchant.
+   *
+   * @return a list of reviews posted to a merchant, or empty list if the merchant haven't been reviewed.
+   * List is sorted by time descending.
+   */
+  public List<Review> getReviews(UUID merchantID) {
+    List<Review> reviews = new ArrayList<>();
+
+    Query query = new Query("Review")
+            .setFilter(new Query.FilterPredicate("merchantID", FilterOperator.EQUAL, merchantID.toString()))
+            .addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        UUID id = UUID.fromString(entity.getKey().getName());
+        String userEmail = (String) entity.getProperty("userEmail");
+        String text = (String) entity.getProperty("text");
+        long rating = (long) entity.getProperty("rating");
+        long timestamp = (long) entity.getProperty("timestamp");
+
+        Review review = new Review(id, userEmail, merchantID, text, rating, timestamp);
+        reviews.add(review);
+      } catch (Exception e) {
+        System.err.println("Error reading review.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return reviews;
+  }
+
   /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());
@@ -139,18 +185,69 @@ public class Datastore {
    */
   public User getUser(String email) {
 
-    Query query = new Query("User").setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+    Query query = new Query("User")
+            .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
     if (userEntity == null) {
       return null;
     }
 
-    String university = (String) userEntity.getProperty("university");
+    long university = (long)userEntity.getProperty("university");
     String aboutMe = (String) userEntity.getProperty("aboutMe");
     User user = new User(email, university, aboutMe);
 
     return user;
+  }
+
+  /** Stores the University in Datastore. */
+  public void storeUniversity(University university) {
+    Entity universityEntity = new Entity("University", university.getID());
+    universityEntity.setProperty("ID", university.getID());
+    universityEntity.setProperty("name", university.getName());
+    datastore.put(universityEntity);
+  }
+
+  /** Returns a list of supported universities. */
+  public List<University> getUniversities() {
+    List<University> universities = new ArrayList<>();
+
+    Query query = new Query("University")
+            .addSort("ID", SortDirection.ASCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        long ID = (long) entity.getProperty("ID");
+        String name = (String) entity.getProperty("name");
+
+        University university = new University(ID, name);
+        universities.add(university);
+      } catch (Exception e) {
+        System.err.println("Error loading universities.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return universities;
+  }
+
+  /** Returns University by ID */
+  public University getUniversity(long ID) {
+
+    Query query = new Query("University")
+            .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, ID));
+    PreparedQuery results = datastore.prepare(query);
+    Entity universityEntity = results.asSingleEntity();
+    if (universityEntity == null) {
+      return null;
+    }
+
+    String name = (String) universityEntity.getProperty("name");
+    University university = new University(ID, name);
+
+    return university;
   }
 
   /** Stores the Merchant in Datastore. */
@@ -168,7 +265,7 @@ public class Datastore {
 
   public List<Merchant> getAllMerchants() {
     List<Merchant> merchants = new ArrayList<>();
-    
+
     Query query = new Query("Merchant");
     PreparedQuery results = datastore.prepare(query);
 
@@ -177,7 +274,7 @@ public class Datastore {
         String idString = entity.getKey().getName();
         UUID id = UUID.fromString(idString);
         String name = (String) entity.getProperty("name");
-        String cuisine = (String) entity.getProperty("cuisine"); 
+        String cuisine = (String) entity.getProperty("cuisine");
         String location = (String) entity.getProperty("location");
         double latitude = (double) entity.getProperty("latitude");
         double longitude = (double) entity.getProperty("longitude");

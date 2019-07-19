@@ -8,13 +8,13 @@
 <script src="/js/navigation-loader.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-<nav>
-<ul id="navigation">
-    <li><a href="/index.html">Home</a></li>
-    <li><a href="/aboutus.html">About Our Team</a></li>
-    <li><a href="/search.html">Merchant Feed</a></li>
-</ul>
-</nav>
+<div id="nav-placeholder"></div>
+<!-- insert navigation bar from navigation.html -->
+<script>
+ $.get("navigation.html", function(data){
+  $("#nav-placeholder").replaceWith(data);
+ });
+</script>
 <script>
     
   // Fetch messages and add them to the page.
@@ -56,9 +56,14 @@
   }
   
   function buildMerchantDiv(merchant){
+   const merchantLink = document.createElement('a');
+   merchantLink.appendChild(document.createTextNode(merchant.name))
+   merchantLink.href = '/merchants.html?id=' + merchant.id
+
    const nameDiv = document.createElement('div');
    nameDiv.classList.add("left-align");
-   nameDiv.appendChild(document.createTextNode(merchant.name)); 
+   nameDiv.appendChild(merchantLink);
+   console.log(nameDiv)
       
    const headerDiv = document.createElement('div');
    headerDiv.classList.add('message-header');
@@ -148,6 +153,6 @@
   <hr/>
   <div id="message-container" style="max-width: 500px">Loading...</div>
  </div>
- 
+
 </body>
 </html>

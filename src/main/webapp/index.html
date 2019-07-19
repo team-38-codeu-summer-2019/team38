@@ -21,21 +21,25 @@ limitations under the License.
     <title>Project Prototype</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="/js/navigation-loader.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <nav>
-      <ul id="navigation">
-          <li><a href="/">Home</a></li>
-        <li><a href="/aboutus.html">About Our Team</a></li>
-        <li><a href="/search.html">Merchant Feed</a></li>
-      </ul>
-    </nav>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <div id="nav-placeholder"></div>
+    <!-- insert navigation bar from navigation.html -->
+    <script>
+      $.get("navigation.html", function(data){
+        $("#nav-placeholder").replaceWith(data);
+      });
+    </script>
   </head>
+
   <body style="margin: 10px;">
     <h1>Prototype</h1>
-    <p>Hello! This website is a catalog for your favorite meal on campus!
-        Review your food and help people find new stuff to eat!
+    <p>
+      Hello! This website is a catalog for your favorite meal on campus!
+      <br>
+      Review your food and help people find new stuff to eat!
     </p>
   </body>
 </html>
+
