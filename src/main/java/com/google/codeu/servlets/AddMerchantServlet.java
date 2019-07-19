@@ -67,7 +67,6 @@ public class AddMerchantServlet extends HttpServlet {
     String location = Jsoup.clean(request.getParameter("location"), Whitelist.none());
     double latitude = Double.parseDouble(Jsoup.clean(request.getParameter("latitude"), Whitelist.none()));
     double longitude = Double.parseDouble(Jsoup.clean(request.getParameter("longitude"), Whitelist.none()));
-    System.out.println("image " + image);
     // String regex = "(https?://\\S+\\.(png|jpg))";
     // String replacement = "<img src=\"$1\" />";
     // String textWithImagesReplaced = text.replaceAll(regex, replacement);
