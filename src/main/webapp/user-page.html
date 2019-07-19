@@ -41,7 +41,9 @@ limitations under the License.
     <div id="about-me-form" class="hidden">
       <form action="/about" method="POST">
         University:<br/>
-        <input type="text" name="university" placeholder="university"></input><br/>
+        <select name="university">
+          <option value="-1" selected style="display: none">university</option>
+        </select><br/>
         <br/>
         About Me:<br/>
         <textarea name="about-me" placeholder="about me" rows=4></textarea><br/>

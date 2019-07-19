@@ -3,10 +3,10 @@ package com.google.codeu.data;
 public class User {
 
     private String email;
-    private String university;
+    private long university = -1;
     private String aboutMe;
 
-    public User(String email, String university, String aboutMe) {
+    public User(String email, long university, String aboutMe) {
         this.email = email;
         this.university = university;
         this.aboutMe = aboutMe;
@@ -16,7 +16,7 @@ public class User {
         return email;
     }
 
-    public String getUniversity() {
+    public long getUniversity() {
         return university;
     }
 
