@@ -17,10 +17,12 @@
 package com.google.codeu.servlets;
 
 import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Merchant;
-import com.google.gson.JsonObject;
-
+import com.google.codeu.data.Menu;
+import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,8 +31,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
 /** Handles fetching and saving {@link Message} instances. */
-@WebServlet("/add-merchant")
-public class AddMerchantServlet extends HttpServlet {
+@WebServlet("/menus")
+public class MenuServlet extends HttpServlet {
 
   private Datastore datastore;
 
@@ -44,36 +46,30 @@ public class AddMerchantServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    String merchantId = request.getParameter("id");
-    Merchant merchant = datastore.getMerchant(merchantId);
-    
-    JsonObject jsonObject = new JsonObject();
-    jsonObject.addProperty("id", merchantId);
-    jsonObject.addProperty("image", merchant.getImage());
-    jsonObject.addProperty("name", merchant.getName());
-    jsonObject.addProperty("cuisine", merchant.getCuisine());
-    jsonObject.addProperty("location", merchant.getLocation());
-        
-    response.getWriter().println(jsonObject.toString());
+    String merchantId = Jsoup.clean(request.getParameter("merchantId"), Whitelist.none());
+    List<Menu> menus = datastore.getAllMenus(merchantId);
+    Gson gson = new Gson();
+    String json = gson.toJson(menus);
+
+    response.getWriter().println(json);
   }
 
-  /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     String name = Jsoup.clean(request.getParameter("name"), Whitelist.none());
     String image = Jsoup.clean(request.getParameter("image"), Whitelist.none());
-    String cuisine = Jsoup.clean(request.getParameter("cuisine"), Whitelist.none());
-    String location = Jsoup.clean(request.getParameter("location"), Whitelist.none());
-    double latitude = Double.parseDouble(Jsoup.clean(request.getParameter("latitude"), Whitelist.none()));
-    double longitude = Double.parseDouble(Jsoup.clean(request.getParameter("longitude"), Whitelist.none()));
+    String description = Jsoup.clean(request.getParameter("description"), Whitelist.none());
+    long price = Long.parseLong(Jsoup.clean(request.getParameter("price"), Whitelist.none()));
+    UUID merchantId = UUID.fromString(Jsoup.clean(request.getParameter("merchantId"), Whitelist.none()));
+
     // String regex = "(https?://\\S+\\.(png|jpg))";
     // String replacement = "<img src=\"$1\" />";
     // String textWithImagesReplaced = text.replaceAll(regex, replacement);
 
-    Merchant merchant = new Merchant(name,cuisine,latitude,longitude,location, image);
-    datastore.storeMerchant(merchant);
+    Menu menu = new Menu(name,image,description,price,merchantId);
+    datastore.storeMenu(menu);
 
-    response.sendRedirect("/search.html");
+    response.sendRedirect("/merchants.html?id=" + merchantId);
   }
 }

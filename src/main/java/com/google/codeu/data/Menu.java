@@ -20,6 +20,15 @@ public class Menu {
     this.merchantId = merchantId;
   }
 
+  public Menu(UUID id, String name, String image, String description, long price, UUID merchantId) {
+    this.id = id;
+    this.name = name;
+    this.image = image;
+    this.description = description;
+    this.price = price;
+    this.merchantId = merchantId;
+  }
+
   public UUID getId() {
     return id;
   }
@@ -40,7 +49,7 @@ public class Menu {
     return price;
   }
 
-  public UUID merchantId() {
+  public UUID getMerchantId() {
     return merchantId;
   }
 }

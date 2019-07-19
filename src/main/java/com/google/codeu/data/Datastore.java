@@ -253,11 +253,13 @@ public class Datastore {
   /** Stores the Merchant in Datastore. */
   public void storeMerchant(Merchant merchant) {
     Entity merchantEntity = new Entity("Merchant", merchant.getId().toString());
+    merchantEntity.setProperty("id", merchant.getId().toString());
     merchantEntity.setProperty("name", merchant.getName());
     merchantEntity.setProperty("cuisine", merchant.getCuisine());
     merchantEntity.setProperty("location", merchant.getLocation());
     merchantEntity.setProperty("latitude", merchant.getLatitude());
     merchantEntity.setProperty("longitude", merchant.getLongitude());
+    merchantEntity.setProperty("image", merchant.getImage());
 
     datastore.put(merchantEntity);
   }
@@ -277,8 +279,9 @@ public class Datastore {
         String location = (String) entity.getProperty("location");
         double latitude = (double) entity.getProperty("latitude");
         double longitude = (double) entity.getProperty("longitude");
+        String image = (String) entity.getProperty("image");
 
-        Merchant merchant = new Merchant(id, name, cuisine, latitude, longitude, location);
+        Merchant merchant = new Merchant(id, name, cuisine, latitude, longitude, location, image);
         merchants.add(merchant);
       } catch (Exception e) {
         System.err.println("Error reading merchant.");
@@ -290,5 +293,66 @@ public class Datastore {
     return merchants;
   }
 
+  /** Stores the Merchant in Datastore. */
+  public void storeMenu(Menu menu) {
+    Entity menuEntity = new Entity("Menu", menu.getId().toString());
+    menuEntity.setProperty("name", menu.getName());
+    menuEntity.setProperty("image", menu.getImage());
+    menuEntity.setProperty("description", menu.getDescription());
+    menuEntity.setProperty("price", menu.getPrice());
+    menuEntity.setProperty("merchantId", menu.getMerchantId().toString());
+
+    datastore.put(menuEntity);
+  }
+
+  public Merchant getMerchant(String id) {
+
+    Query query = new Query("Merchant").setFilter(new Query.FilterPredicate("id", FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    if (entity == null) {
+      return null;
+    }
+
+    String name = (String) entity.getProperty("name");
+    String cuisine = (String) entity.getProperty("cuisine");
+    String location = (String) entity.getProperty("location");
+    double latitude = (double) entity.getProperty("latitude");
+    double longitude = (double) entity.getProperty("longitude");
+    String image = (String) entity.getProperty("image");
+    UUID idMerchant = UUID.fromString(id);
+
+    Merchant merchant = new Merchant(idMerchant, name, cuisine, latitude, longitude, location, image);
+
+    return merchant;
+  }
+
+  public List<Menu> getAllMenus(String merchantId) {
+    List<Menu> menus = new ArrayList<>();
+    
+    Query query = new Query("Menu").setFilter(new Query.FilterPredicate("merchantId", FilterOperator.EQUAL, merchantId));;
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        String idString = entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
+        String name = (String) entity.getProperty("name");
+        String image = (String) entity.getProperty("image"); 
+        String description = (String) entity.getProperty("description");
+        long price = (long) entity.getProperty("price");
+        UUID idMerchant = UUID.fromString(merchantId);
+
+        Menu menu = new Menu(id, name, image, description, price, idMerchant);
+        menus.add(menu);
+      } catch (Exception e) {
+        System.err.println("Error reading menu.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return menus;
+  }
 
 }
