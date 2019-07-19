@@ -51,9 +51,14 @@
   }
   
   function buildMerchantDiv(merchant){
+   const merchantLink = document.createElement('a');
+   merchantLink.appendChild(document.createTextNode(merchant.name))
+   merchantLink.href = '/merchants.html?id=' + merchant.id
+
    const nameDiv = document.createElement('div');
    nameDiv.classList.add("left-align");
-   nameDiv.appendChild(document.createTextNode(merchant.name)); 
+   nameDiv.appendChild(merchantLink);
+   console.log(nameDiv)
       
    const headerDiv = document.createElement('div');
    headerDiv.classList.add('message-header');
