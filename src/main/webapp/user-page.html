@@ -36,8 +36,8 @@ limitations under the License.
     </nav>
     <h1 id="page-title">User Page</h1>
 
-    <div id="university-container">Loading...</div><br/>
-    <div id="about-me-container">Loading...</div><br/>
+    <div id="university-container"></div><br/>
+    <div id="about-me-container"></div><br/>
     <div id="about-me-form" class="hidden">
       <form action="/about" method="POST">
         University:<br/>
@@ -47,21 +47,21 @@ limitations under the License.
         <br/>
         About Me:<br/>
         <textarea name="about-me" placeholder="about me" rows=4></textarea><br/>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Update">
       </form>
     </div>
     <br/>
 
-    <form id="message-form" action="/messages" method="POST" class="hidden">
-      Enter a new message:
-      <br/>
-      <textarea name="text" id="message-input"></textarea>
-      <br/>
-      <input type="submit" value="Submit">
-    </form>
-    <br/>
+<!--    <form id="message-form" action="/messages" method="POST" class="hidden">-->
+<!--      Enter a new message:-->
+<!--      <br/>-->
+<!--      <textarea name="text" id="message-input"></textarea>-->
+<!--      <br/>-->
+<!--      <input type="submit" value="Submit">-->
+<!--    </form>-->
+<!--    <br/>-->
 
-    <div id="message-container">Loading...</div>
+<!--    <div id="message-container">Loading...</div>-->
 
   </body>
 </html>

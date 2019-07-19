@@ -92,10 +92,10 @@ function fetchAboutMe() {
       })
       .then((responseJson) => {
         const universityInput = document.getElementsByName('university')[0];
-        if (responseJson.universityID == -1) {
-          responseJson.universityID = 'This user has not entered their university yet.';
-        }else{
+        if (responseJson.universityID >= 1) {
           universityInput.value = responseJson.universityID;
+        }else{
+          responseJson.universityName = 'This user has not entered their university yet.';
         }
         const universityContainer = document.getElementById('university-container');
         universityContainer.innerHTML = responseJson.universityName;
@@ -157,7 +157,7 @@ function buildMessageDiv(message) {
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
-  showMessageFormIfViewingSelf();
+  // showMessageFormIfViewingSelf();
   fetchUniversities();
-  fetchMessages();
+  // fetchMessages();
 }
