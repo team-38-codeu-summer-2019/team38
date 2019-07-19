@@ -39,6 +39,52 @@ public class Datastore {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
+  /** Stores the Review in Datastore. */
+  public void storeReview(Review review) {
+    Entity reviewEntity = new Entity("Review", review.getID().toString());
+    reviewEntity.setProperty("userEmail", review.getUserEmail());
+    reviewEntity.setProperty("merchantID", review.getMerchantID().toString());
+    reviewEntity.setProperty("text", review.getText());
+    reviewEntity.setProperty("rating", review.getRating());
+    reviewEntity.setProperty("timestamp", review.getTimestamp());
+
+    datastore.put(reviewEntity);
+  }
+
+  /**
+   * Gets reviews posted to a specific merchant.
+   *
+   * @return a list of reviews posted to a merchant, or empty list if the merchant haven't been reviewed.
+   * List is sorted by time descending.
+   */
+  public List<Review> getReviews(UUID merchantID) {
+    List<Review> reviews = new ArrayList<>();
+
+    Query query = new Query("Review")
+            .setFilter(new Query.FilterPredicate("merchantID", FilterOperator.EQUAL, merchantID.toString()))
+            .addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        UUID id = UUID.fromString(entity.getKey().getName());
+        String userEmail = (String) entity.getProperty("userEmail");
+        String text = (String) entity.getProperty("text");
+        long rating = (long) entity.getProperty("rating");
+        long timestamp = (long) entity.getProperty("timestamp");
+
+        Review review = new Review(id, userEmail, merchantID, text, rating, timestamp);
+        reviews.add(review);
+      } catch (Exception e) {
+        System.err.println("Error reading review.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return reviews;
+  }
+
   /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());

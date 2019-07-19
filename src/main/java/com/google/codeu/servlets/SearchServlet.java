@@ -18,30 +18,30 @@ import org.jsoup.safety.Whitelist;
  * Handles fetching all merchants for the merchant feed.
  */
 @WebServlet("/search")
-public class SearchServlet extends HttpServlet{
+public class SearchServlet extends HttpServlet {
 
- private Datastore datastore;
+    private Datastore datastore;
 
- @Override
- public void init() {
-  datastore = new Datastore();
- }
+    @Override
+    public void init() {
+        datastore = new Datastore();
+    }
 
- public void doPost(HttpServletRequest request, HttpServletResponse response)
-   throws IOException {
-  String merchant = Jsoup.clean(request.getParameter("merchant"), Whitelist.none());
-  response.sendRedirect("/search.html?merchant=" + merchant);
- }
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
 
- public void doGet(HttpServletRequest request, HttpServletResponse response)
-   throws IOException {
+        response.setContentType("application/json");
 
-  response.setContentType("application/json");
-  
-  List<Merchant> merchants = datastore.getAllMerchants();
-  Gson gson = new Gson();
-  String json = gson.toJson(merchants);
-  
-  response.getOutputStream().println(json);
- }
+        List<Merchant> merchants = datastore.getAllMerchants();
+        Gson gson = new Gson();
+        String json = gson.toJson(merchants);
+
+        response.getOutputStream().println(json);
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        String merchant = Jsoup.clean(request.getParameter("merchant"), Whitelist.none());
+        response.sendRedirect("/search.html?merchant=" + merchant);
+    }
 }
