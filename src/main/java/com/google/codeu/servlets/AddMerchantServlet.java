@@ -49,6 +49,7 @@ public class AddMerchantServlet extends HttpServlet {
     
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("id", merchantId);
+    jsonObject.addProperty("image", merchant.getImage());
     jsonObject.addProperty("name", merchant.getName());
     jsonObject.addProperty("cuisine", merchant.getCuisine());
     jsonObject.addProperty("location", merchant.getLocation());
@@ -61,16 +62,17 @@ public class AddMerchantServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     String name = Jsoup.clean(request.getParameter("name"), Whitelist.none());
+    String image = Jsoup.clean(request.getParameter("image"), Whitelist.none());
     String cuisine = Jsoup.clean(request.getParameter("cuisine"), Whitelist.none());
     String location = Jsoup.clean(request.getParameter("location"), Whitelist.none());
     double latitude = Double.parseDouble(Jsoup.clean(request.getParameter("latitude"), Whitelist.none()));
     double longitude = Double.parseDouble(Jsoup.clean(request.getParameter("longitude"), Whitelist.none()));
-
+    System.out.println("image " + image);
     // String regex = "(https?://\\S+\\.(png|jpg))";
     // String replacement = "<img src=\"$1\" />";
     // String textWithImagesReplaced = text.replaceAll(regex, replacement);
 
-    Merchant merchant = new Merchant(name,cuisine,latitude,longitude,location);
+    Merchant merchant = new Merchant(name,cuisine,latitude,longitude,location, image);
     datastore.storeMerchant(merchant);
 
     response.sendRedirect("/search.html");

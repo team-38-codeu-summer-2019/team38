@@ -21,6 +21,7 @@
           const merchantContainer = document.getElementById('merchant-container');
           merchantContainer.innerHTML = '';
 
+          console.log(merchant)
           if (merchant.image != null) {
             const imgElement = buildImageElement(merchant.image);
             imgElement.classList.add("merchant-img");
