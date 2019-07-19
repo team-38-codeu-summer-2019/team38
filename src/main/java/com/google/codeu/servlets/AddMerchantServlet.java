@@ -16,13 +16,11 @@
 
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Merchant;
-import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,12 +44,16 @@ public class AddMerchantServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    String merchantId = Jsoup.clean(request.getParameter("url"), Whitelist.none()).split("=")[1];
+    String merchantId = request.getParameter("id");
     Merchant merchant = datastore.getMerchant(merchantId);
-    Gson gson = new Gson();
-    String json = gson.toJson(merchant);
     
-    response.getWriter().println(json);
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.addProperty("id", merchantId);
+    jsonObject.addProperty("name", merchant.getName());
+    jsonObject.addProperty("cuisine", merchant.getCuisine());
+    jsonObject.addProperty("location", merchant.getLocation());
+        
+    response.getWriter().println(jsonObject.toString());
   }
 
   /** Stores a new {@link Message}. */

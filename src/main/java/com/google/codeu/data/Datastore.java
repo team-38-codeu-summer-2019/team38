@@ -156,6 +156,7 @@ public class Datastore {
   /** Stores the Merchant in Datastore. */
   public void storeMerchant(Merchant merchant) {
     Entity merchantEntity = new Entity("Merchant", merchant.getId().toString());
+    merchantEntity.setProperty("id", merchant.getId().toString());
     merchantEntity.setProperty("name", merchant.getName());
     merchantEntity.setProperty("cuisine", merchant.getCuisine());
     merchantEntity.setProperty("location", merchant.getLocation());
@@ -194,7 +195,7 @@ public class Datastore {
   }
 
   /** Stores the Merchant in Datastore. */
-  public void storeMerchant(Menu menu) {
+  public void storeMenu(Menu menu) {
     Entity menuEntity = new Entity("Menu", menu.getId().toString());
     menuEntity.setProperty("name", menu.getName());
     menuEntity.setProperty("image", menu.getImage());

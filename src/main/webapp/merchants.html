@@ -10,7 +10,6 @@
         fetch(url).then((response) => {
           return response.json();
         }).then((merchant) => {
-          
           const merchantName = document.getElementById('merchant-name');
           const nameNode = document.createTextNode(merchant.name);
           merchantName.appendChild(nameNode);
@@ -18,12 +17,20 @@
           const merchantContainer = document.getElementById('merchant-container');
           merchantContainer.innerHTML = '';
 
-          const imgElement = buildImageElement(merchant.image);
-          imgElement.classList.add("merchant-img");
-          merchantContainer.appendChild(imgElement);
-
+          if (merchant.image != null) {
+            const imgElement = buildImageElement(merchant.image);
+            imgElement.classList.add("merchant-img");
+            merchantContainer.appendChild(imgElement);
+          }
+          
           const merchantDesc = buildMerchantDescription(merchant);
           merchantContainer.appendChild(merchantDesc)
+
+          const linkEl = document.createElement('a');
+          const node = document.createTextNode("Add new menu");
+          linkEl.appendChild(node);
+          linkEl.setAttribute('href', '/add-menu.html?merchantId='+ merchant.id)
+          merchantContainer.appendChild(linkEl)
         })
       }
 
@@ -66,13 +73,8 @@
           const menuContainer = document.getElementById('menus');
           menuContainer.innerHTML = ''
 
-          const linkEl = document.createElement('a');
-          const node = document.createTextNode("Add new menu");
-          linkEl.appendChild(node);
-          linkEl.setAttribute('href', '/add-menu.html?merchantId'+ merchant.id)
-          menuContainer.appendChild(linkEl)
-
-          for(menu in menus) {
+          menus.forEach((menu) => {
+            console.log(menu);
             const menuDiv = document.createElement('div');
 
             const H4 = document.createElement('h4');
@@ -80,29 +82,32 @@
             H4.appendChild(h4Node);
             menuDiv.appendChild(H4)
 
-            const imgElement = buildImageElement(menu.image);
-            imgElement.classList.add("merchant-img");
-            imgElement.appendChild(imgElement);
+            if (menu.image != null) {
+              const imgElement = buildImageElement(menu.image);
+              imgElement.classList.add("merchant-img");
+              menuDiv.appendChild(imgElement);
+            }
 
             const priceElement = document.createElement('p');
-            const priceNode = document.createTextNode(menu.price);
+            const priceNode = document.createTextNode('Price: ' + menu.price);
             priceElement.appendChild(priceNode);
             menuDiv.appendChild(priceElement)
 
             const descElement = document.createElement('p');
-            const descNode = document.createTextNode(menu.description);
+            const descNode = document.createTextNode('Description: ' + menu.description);
             descElement.appendChild(descNode);
             menuDiv.appendChild(descElement)
 
             menuContainer.appendChild(menuDiv)
-          }
+          })
         })
       }
 
       function buildUI() {
-        const url_string = window.location.href;
-        const url = new URL(url_string)
-        fetchMerchant(url.searchParams.get('id'))
+        const url = new URL(window.location.href)
+        const id = url.searchParams.get('id')
+        fetchMerchant(id)
+        fetchMenus(id)
       }
 
     </script>

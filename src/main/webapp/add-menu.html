@@ -24,6 +24,18 @@ limitations under the License.
     <script src="/js/navigation-loader.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      function insertMerchantId(merchantId) {
+        const inp = document.getElementById('merchantId');
+        inp.setAttribute('value', merchantId);
+      }
+
+      function buildUI() {
+        const url = new URL(window.location.href)
+        const id = url.searchParams.get("merchantId")
+        insertMerchantId(id)
+      }
+    </script>
     <nav>
     <ul id="navigation">
         <li><a href="/index.html">Home</a></li>
@@ -32,14 +44,16 @@ limitations under the License.
     </ul>
     </nav>
   </head>
-  <body style="margin: 10px;">
-    <form action="/menu" method="POST">
+  <body onload="buildUI()" style="margin: 10px;">
+    <form action="/menus" method="POST">
       <h4>Enter a new menu:</h4>
       Name: <input name="name" type="text"><br>
       Image URL: <input name="image" type="text"><br>
       Description: <input name="description" type="textarea"><br>
       Price: <input name="price" type="text"><br>
-      <input class="hidden" name="merchantId" type="text"><br>
+      <div class="hidden">
+        <input id="merchantId" name="merchantId" type="text"><br>
+      </div>
       <br/>
       <input type="submit" value="Submit">
     </form>

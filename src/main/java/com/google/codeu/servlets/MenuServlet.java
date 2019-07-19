@@ -17,7 +17,6 @@
 package com.google.codeu.servlets;
 
 import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Merchant;
 import com.google.codeu.data.Menu;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -32,7 +31,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
 /** Handles fetching and saving {@link Message} instances. */
-@WebServlet("/menu")
+@WebServlet("/menus")
 public class MenuServlet extends HttpServlet {
 
   private Datastore datastore;
@@ -69,7 +68,7 @@ public class MenuServlet extends HttpServlet {
     // String textWithImagesReplaced = text.replaceAll(regex, replacement);
 
     Menu menu = new Menu(name,image,description,price,merchantId);
-    datastore.storeMerchant(menu);
+    datastore.storeMenu(menu);
 
     response.sendRedirect("/merchants.html?id=" + merchantId);
   }
