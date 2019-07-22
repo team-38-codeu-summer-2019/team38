@@ -41,8 +41,8 @@ function showMessageFormIfViewingSelf() {
         if (loginStatus.isLoggedIn && loginStatus.username == parameterUsername) {
           const aboutMeForm = document.getElementById('about-me-form');
           aboutMeForm.classList.remove('hidden');
-          const messageForm = document.getElementById('message-form');
-          messageForm.classList.remove('hidden');
+          // const messageForm = document.getElementById('message-form');
+          // messageForm.classList.remove('hidden');
         }
       });
 }
