@@ -85,6 +85,40 @@ public class Datastore {
     return reviews;
   }
 
+  /**
+   * Gets reviews posted by a specific user.
+   *
+   * @return a list of reviews posted by a user, or empty list if the user haven't post reviews.
+   * List is sorted by time descending.
+   */
+  public List<Review> getReviewsByUser(String userEmail) {
+    List<Review> reviews = new ArrayList<>();
+
+    Query query = new Query("Review")
+            .setFilter(new Query.FilterPredicate("userEmail", FilterOperator.EQUAL, userEmail))
+            .addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        UUID id = UUID.fromString(entity.getKey().getName());
+        UUID merchantID = UUID.fromString((String)entity.getProperty("merchantID"));
+        String text = (String) entity.getProperty("text");
+        long rating = (long) entity.getProperty("rating");
+        long timestamp = (long) entity.getProperty("timestamp");
+
+        Review review = new Review(id, userEmail, merchantID, text, rating, timestamp);
+        reviews.add(review);
+      } catch (Exception e) {
+        System.err.println("Error reading review.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return reviews;
+  }
+
   /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());
