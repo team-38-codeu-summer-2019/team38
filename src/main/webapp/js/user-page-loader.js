@@ -69,11 +69,10 @@ function fetchUniversities() {
         form.addEventListener("submit", function (e) {
           e.preventDefault();
           univNameInput.disabled = true;
-          univIDInput.disabled = true;
+          univIDInput.value = -1;
           for (i = 0; i < universities.length; i++){
             if (universities[i].name == univNameInput.value){
               univIDInput.value = universities[i].ID;
-              univIDInput.disabled = false;
               break;
             }
           }
@@ -255,9 +254,9 @@ function buildMessageDiv(message) {
 
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
+  fetchUniversities();
   setPageTitle();
   showMessageFormIfViewingSelf();
   fetchAboutMe();
-  fetchUniversities();
   // fetchMessages();
 }

@@ -36,10 +36,13 @@ limitations under the License.
     </script>
   </head>
   <body onload="buildUI();" style="margin: 10px;">
-    <h1 id="page-title">User Page</h1>
+    <h1 id="page-title">User Page</h1><br/>
 
+    University:<br/>
     <div id="university-container">Loading...</div><br/>
+    About Me:<br/>
     <div id="about-me-container">Loading...</div><br/>
+
     <div id="about-me-form" class="hidden">
       <form id="user-form" autocomplete="off" action="/about" method="POST">
         University:<br/>
@@ -58,7 +61,7 @@ limitations under the License.
     </div>
 
     Reviews:
-    <div id="review-placeholder"></div>
+    <div id="review-placeholder">Loading...</div>
 
 <!--    <form id="message-form" action="/messages" method="POST" class="hidden">-->
 <!--      Enter a new message:-->
