@@ -38,21 +38,23 @@ limitations under the License.
   <body onload="buildUI();" style="margin: 10px;">
     <h1 id="page-title">User Page</h1>
 
-    <div id="university-container"></div><br/>
-    <div id="about-me-container"></div><br/>
+    <div id="university-container">Loading...</div><br/>
+    <div id="about-me-container">Loading...</div><br/>
     <div id="about-me-form" class="hidden">
-      <form action="/about" method="POST">
+      <form id="user-form" autocomplete="off" action="/about" method="POST">
         University:<br/>
-        <select name="university">
-          <option value="-1" selected style="display: none">university</option>
-        </select><br/>
+        <div class="autocomplete">
+          <input name="university"  type="text" placeholder="university">
+          <input name="universityy" type="text" hidden>
+        </div>
         <br/>
         About Me:<br/>
         <textarea name="about-me" placeholder="about me" rows=4></textarea><br/>
         <input type="submit" value="Update">
+        <br/>
+        <br/>
       </form>
     </div>
-    <br/>
 
     Reviews:
     <div id="review-placeholder"></div>

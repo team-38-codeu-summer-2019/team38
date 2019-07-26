@@ -1,6 +1,10 @@
 package com.google.codeu.servlets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +16,11 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.University;
 import com.google.codeu.data.User;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
@@ -61,12 +69,50 @@ public class AboutMeServlet extends HttpServlet {
 
         long universityID = userData.getUniversity();
         University university = datastore.getUniversity(universityID);
-        String universityName = university.getName();
+        String universityName = "";
+        if (university != null) {
+            universityName = university.getName();
+        }
         String aboutMe = userData.getAboutMe();
 
         jsonObject.addProperty("universityID", universityID);
         jsonObject.addProperty("universityName", universityName);
         jsonObject.addProperty("aboutMe", aboutMe);
+
+        /*URL url = new URL("https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json");
+        BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+        JsonParser jsonParser = new JsonParser();
+        JsonArray array_ = jsonParser.parse(br).getAsJsonArray();
+        List<String> lst = new ArrayList<>();
+        HashSet<String> s = new HashSet<>();
+        List<String> APAC_NA = Arrays.asList(
+            "AS", "AU", "BD", "BN", "BT", "CC", "CN", "CX", "FJ", "FM",
+            "GU", "HK", "ID", "IN", "IO", "JP", "KH", "KI", "KP", "KR",
+            "LA", "LK", "MH", "MM", "MN", "MO", "MP", "MV", "MY", "NF",
+            "NP", "NR", "NU", "NZ", "PG", "PH", "PK", "PN", "PW", "SB",
+            "SG", "TH", "TK", "TL", "TO", "TV", "TW", "UM", "VN", "VU",
+            "WS", "CA", "US"
+        );
+        for (JsonElement jsonElement : array_){
+            JsonObject jsonObject1 = (JsonObject)jsonElement;
+            String code = jsonObject1.get("alpha_two_code").toString();
+            code = code.substring(1, 3);
+            if (APAC_NA.contains(code)) {
+                universityName = jsonObject1.get("name").toString();
+                universityName = universityName.substring(1, universityName.length() - 1);
+                universityName = StringEscapeUtils.unescapeJava(universityName);
+                if (!s.contains(universityName)) {
+                    lst.add(universityName);
+                    s.add(universityName);
+                }
+            }
+        }
+        Collections.sort(lst);
+        int it = 0;
+        for (String universityName_ : lst) {
+            University university1 = new University(++it, universityName_);
+            datastore.storeUniversity(university1);
+        }*/
 
         response.getWriter().println(jsonObject.toString());
     }
@@ -82,19 +128,11 @@ public class AboutMeServlet extends HttpServlet {
         }
 
         String userEmail = userService.getCurrentUser().getEmail();
-        long university = Long.parseLong(request.getParameter("university"));
+        long university = Long.parseLong(request.getParameter("universityy"));
         String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
 
         User user = new User(userEmail, university, aboutMe);
         datastore.storeUser(user);
-
-        /* to add University to Datastore
-        University a = new University(1, "National University of Singapore");
-        University b = new University(2, "Universitas Indonesia");
-        University c = new University(3, "The University of Hongkong");
-        datastore.storeUniversity(a);
-        datastore.storeUniversity(b);
-        datastore.storeUniversity(c);*/
 
         response.sendRedirect("/user-page.html?user=" + userEmail);
     }
