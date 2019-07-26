@@ -128,7 +128,7 @@ public class AboutMeServlet extends HttpServlet {
         }
 
         String userEmail = userService.getCurrentUser().getEmail();
-        long university = Long.parseLong(request.getParameter("universityy"));
+        long university = Long.parseLong(request.getParameter("univ-ID"));
         String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
 
         User user = new User(userEmail, university, aboutMe);

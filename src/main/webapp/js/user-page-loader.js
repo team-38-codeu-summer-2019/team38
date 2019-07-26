@@ -60,19 +60,20 @@ function fetchUniversities() {
         universities = responseJson;
       })
       .then(() => {
-        const universityInput = document.getElementsByName('university')[0];
-        autocomplete(universityInput, universities);
-        const universityyInput = document.getElementsByName('universityy')[0];
+        const univNameInput = document.getElementsByName('univ-name')[0];
+        autocomplete(univNameInput, universities);
+        const univIDInput = document.getElementsByName('univ-ID')[0];
 
         /*changes POSTed value*/
         const form = document.getElementById("user-form");
         form.addEventListener("submit", function (e) {
           e.preventDefault();
-          universityInput.disabled = true;
-          universityyInput.value = -1;
+          univNameInput.disabled = true;
+          univIDInput.disabled = true;
           for (i = 0; i < universities.length; i++){
-            if (universities[i].name == universityInput.value){
-              universityyInput.value = universities[i].ID;
+            if (universities[i].name == univNameInput.value){
+              univIDInput.value = universities[i].ID;
+              univIDInput.disabled = false;
               break;
             }
           }
@@ -89,8 +90,8 @@ function fetchAboutMe() {
         return response.json();
       })
       .then((responseJson) => {
-        const universityInput = document.getElementsByName('university')[0];
-        universityInput.value = responseJson.universityName;
+        const univNameInput = document.getElementsByName('univ-name')[0];
+        univNameInput.value = responseJson.universityName;
         if (responseJson.universityName == '') {
           responseJson.universityName = 'This user has not entered their university yet.';
         }
@@ -256,7 +257,7 @@ function buildMessageDiv(message) {
 function buildUI() {
   setPageTitle();
   showMessageFormIfViewingSelf();
-  fetchUniversities();
   fetchAboutMe();
+  fetchUniversities();
   // fetchMessages();
 }
