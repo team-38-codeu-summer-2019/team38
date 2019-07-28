@@ -33,13 +33,35 @@ limitations under the License.
         $("#nav-placeholder").replaceWith(data);
       });
 
+
+      
+      function onSelectChange() {
+        var selectedValue = document.getElementById("image-option").value;    
+        selectedValue == "1" ? upload() : link();
+      }
+
+      function upload() {
+        document.getElementById("enterUrl").disabled = true;
+        document.getElementById("fileBrowse").disabled = false;
+      }
+
+      function link() {    
+        document.getElementById("fileBrowse").disabled = true;
+        document.getElementById("enterUrl").disabled = false;
+      }
+
     </script>
 </head>
-<body style="margin: 10px;">
+<body onload="upload()" style="margin: 10px;">
 <form action="/add-merchant" method="POST">
     <h4>Enter a new merchant:</h4>
     Name: <input name="name" type="text"><br>
-    Image URL: <input name="image" type="text"><br>
+    Image URL: <select id="image-option" onchange="onSelectChange()">
+                <option value="1">Upload an Image</option>
+                <option value="2">Load from URL</option>
+              </select>
+    <input name="image" type="file" id="fileBrowse" accept="image/*">
+    <input name="image" id="enterUrl" type="text"><br>
     Cuisine: <select name="cuisine">
     <option value="American">American</option>
     <option value="British">British</option>
