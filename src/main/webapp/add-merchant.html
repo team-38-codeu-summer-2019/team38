@@ -25,7 +25,7 @@ limitations under the License.
     <script src="/js/navigation-loader.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
+    <script src="/js/add-merchant-loader.js"></script>
     <div id="nav-placeholder"></div>
     <!-- insert navigation bar from navigation.html -->
     <script>
@@ -35,8 +35,8 @@ limitations under the License.
 
     </script>
 </head>
-<body style="margin: 10px;">
-<form action="/add-merchant" method="POST">
+<body onload="buildUI();" style="margin: 10px;">
+<form id="add-merchant-form" autocomplete="off" action="/add-merchant" method="POST">
     <h4>Enter a new merchant:</h4>
     Name: <input name="name" type="text"><br>
     Image URL: <input name="image" type="text"><br>
@@ -58,6 +58,11 @@ limitations under the License.
     <option value="Vietnamese">Vietnamese</option>
     <option value="Western">Western</option>
 </select><br>
+    University:
+    <div class="autocomplete">
+        <input name="univ-name" type="text">
+        <input name="univ-ID" type="text" hidden>
+    </div><br>
     Location: <input name="location" type="text"><br>
     Latitude: <input name="latitude" type="text"><br>
     Longitude: <input name="longitude" type="text">
