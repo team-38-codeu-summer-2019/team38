@@ -290,7 +290,6 @@ public class Datastore {
     merchantEntity.setProperty("id", merchant.getId().toString());
     merchantEntity.setProperty("name", merchant.getName());
     merchantEntity.setProperty("cuisine", merchant.getCuisine());
-    merchantEntity.setProperty("university", merchant.getUniversity());
     merchantEntity.setProperty("location", merchant.getLocation());
     merchantEntity.setProperty("latitude", merchant.getLatitude());
     merchantEntity.setProperty("longitude", merchant.getLongitude());
@@ -310,13 +309,12 @@ public class Datastore {
         UUID id = UUID.fromString(idString);
         String name = (String) entity.getProperty("name");
         String cuisine = (String) entity.getProperty("cuisine");
-        long university = (long) entity.getProperty("university");
         String location = (String) entity.getProperty("location");
         double latitude = (double) entity.getProperty("latitude");
         double longitude = (double) entity.getProperty("longitude");
         String image = (String) entity.getProperty("image");
 
-        Merchant merchant = new Merchant(id, name, cuisine, university, latitude, longitude, location, image);
+        Merchant merchant = new Merchant(id, name, cuisine, latitude, longitude, location, image);
         merchants.add(merchant);
       } catch (Exception e) {
         System.err.println("Error reading merchant.");
@@ -351,14 +349,13 @@ public class Datastore {
 
     String name = (String) entity.getProperty("name");
     String cuisine = (String) entity.getProperty("cuisine");
-    long university = (long) entity.getProperty("university");
     String location = (String) entity.getProperty("location");
     double latitude = (double) entity.getProperty("latitude");
     double longitude = (double) entity.getProperty("longitude");
     String image = (String) entity.getProperty("image");
     UUID idMerchant = UUID.fromString(id);
 
-    Merchant merchant = new Merchant(idMerchant, name, cuisine, university, latitude, longitude, location, image);
+    Merchant merchant = new Merchant(idMerchant, name, cuisine, latitude, longitude, location, image);
 
     return merchant;
   }
