@@ -1,45 +1,167 @@
-<!--
-Copyright 2019 Google Inc.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Can Tin</title>
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-    <div id="nav-placeholder"></div>
-    <!-- insert navigation bar from navigation.html -->
-    <script>
-      $.get("navigation.html", function(data){
-        $("#nav-placeholder").replaceWith(data);
+<head>
+<title>Merchant Feed</title>
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/user-page.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="/js/navigation-loader.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<div id="nav-placeholder"></div>
+<!-- insert navigation bar from navigation.html -->
+<script>
+ $.get("navigation.html", function(data){
+  $("#nav-placeholder").replaceWith(data);
+ });
+</script>
+<script>
+    
+  // Fetch messages and add them to the page.
+  function fetchMerchants(merchantSearch){
+    const url = '/search';
+    fetch(url).then((response) => {
+      return response.json();
+    }).then((merchants) => {
+      const merchantContainer = document.getElementById('message-container');
+      if(merchants.length == 0){
+        merchantContainer.innerHTML = '<p>There are no merchants yet.</p>';
+      }
+      else{
+        merchantContainer.innerHTML = '';  
+      }
+      merchants.sort( function(a,b){  //sort alphabetically
+        if(a.name < b.name) { return -1; }
+        if(a.name > b.name) { return 1; }
+        return 0;
       });
-    </script>
-  </head>
+      let count = 0;
+      merchants.forEach((merchant) => {  
+       console.log(merchant.name+" "+merchantSearch);
+       if( (merchant.name.toLowerCase().includes(merchantSearch.toLowerCase())) || (merchant.location.toLowerCase().includes(merchantSearch.toLowerCase())) || (merchantSearch=="") ) {
+        const merchantDiv = buildMerchantDiv(merchant);
 
-  <body style="margin: 10px;">
-    <h1>Can Tin</h1>
-    <p>
-      Hello! This website is a catalog for your favorite meal on campus!
-      <br>
-      Review your food and help people find new stuff to eat!
-    </p>
-  </body>
+        const linkEl = document.createElement('a');
+        linkEl.setAttribute('href', '/merchants.html?id='+ merchant.id)
+        linkEl.appendChild(merchantDiv)
+
+        merchantContainer.appendChild(linkEl);
+        count++;
+       }
+      });
+      if(count==0 && merchantSearch!=""){
+        merchantContainer.innerHTML = '<p>Search did not match any merchant.</p>';  
+      }
+    });
+  }
+  
+  function buildMerchantDiv(merchant){
+   const merchantLink = document.createElement('a');
+   merchantLink.appendChild(document.createTextNode(merchant.name))
+   merchantLink.href = '/merchants.html?id=' + merchant.id
+
+   const nameDiv = document.createElement('div');
+   nameDiv.classList.add("left-align");
+   nameDiv.appendChild(merchantLink);
+   console.log(nameDiv)
+      
+   const headerDiv = document.createElement('div');
+   headerDiv.classList.add('message-header');
+   headerDiv.appendChild(nameDiv);
+   
+   const bodyDiv1 = document.createElement('div');
+   bodyDiv1.classList.add('message-body');
+   bodyDiv1.appendChild(document.createTextNode(merchant.cuisine));
+
+   const bodyDiv2 = document.createElement('div');
+   bodyDiv2.classList.add('message-body');
+   if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lon: position.coords.longitude
+      };
+    var distance = getDistance(pos.lat,pos.lon,merchant.latitude,merchant.longitude);
+    bodyDiv2.appendChild(document.createTextNode(distance));
+    });
+   } else {
+     console.log("error");
+   }
+
+   const bodyDiv3 = document.createElement('div');
+   bodyDiv3.classList.add('message-body');
+   bodyDiv3.appendChild(document.createTextNode(merchant.location));
+   
+   const merchantDiv = document.createElement('div');
+   merchantDiv.classList.add("message-div");
+   merchantDiv.appendChild(headerDiv);
+   merchantDiv.appendChild(bodyDiv1);
+   merchantDiv.appendChild(bodyDiv2);
+   merchantDiv.appendChild(bodyDiv3);
+   
+   return merchantDiv;
+  }
+  
+  // Fetch data and populate the UI of the page.
+  function buildUI(merchant){
+    fetchMerchants(merchant);
+  }
+
+  function foundLocation(position){
+    curr.lat = position.coords.latitude;
+    curr.lon = position.coords.longitude;
+  }
+
+  function getDistance(lat1,lon1,lat2,lon2) {
+    console.log(lat1+" "+lon1+" "+lat2+" "+lon2);
+    var R = 6371; // km (change this constant to get miles)
+    var dLat = (lat2-lat1) * Math.PI / 180;
+    var dLon = (lon2-lon1) * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180 ) * Math.cos(lat2 * Math.PI / 180 ) *
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    console.log(d);
+    if (d>1) return Math.round(d*10)/10+"km";
+    else if (d<=1) return Math.round(d*1000)+"m";
+    return d;
+  }
+
+  function getMerchantSearch(){
+    var vars = {};
+    vars["merchant"]="";
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        value = value.replace("%27", "'");
+        value = value.replace("%20", " ");
+        vars[key] = value;
+    });
+    return vars;
+  }
+
+</script>
+</head>
+<body onload="buildUI(getMerchantSearch()['merchant'])" style="margin: 10px;">
+ <div id="content">
+  <br>
+  <form action="/search" method="POST" style="max-width: 500px">
+    <div class="form-row">
+      <div class="form-group col-md-10">
+        <input class="form-control w-25" name="merchant" type="search" placeholder="Search" aria-label="Search">
+      </div>
+      <!-- Search Merchant: <input name="merchant" placeholder="Name/Location"> -->
+      <!-- <input type="submit" value="Submit"> -->
+      <div class="form-group col-md-2">
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </div>
+      <div class="form-group col-md-2">
+        <button class="btn btn-outline-success my-2 my-sm-0" onclick="buildUI('')">View All</button>
+      </div>
+    </div>
+  </form>
+  <br>
+  <!-- <div align="right"><a href="add-merchant.html">Add new merchant</a></div> -->
+  <div id="message-container" style="max-width: 500px">Loading...</div>
+ </div>
+</body>
 </html>
-
