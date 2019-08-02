@@ -98,26 +98,43 @@ function setOverallRating(reviews) {
  * @return {Element}
  */
 function buildReviewDiv(review) {
+  const time = new Date(review.timestamp)
+  const timeStr = time.getFullYear() + '-' + (time.getMonth()+1) + '-' + time.getDate()
+
+  const card = document.createElement('div');
+  card.classList.add("card");
+
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('review-header');
-  headerDiv.appendChild(document.createTextNode(
-      review.userEmail + ' - ' + new Date(review.timestamp)));
+  headerDiv.classList.add('card-header');
+  headerDiv.appendChild(document.createTextNode(review.userEmail));
+  card.appendChild(headerDiv)
 
+  const bodyCard = document.createElement('div');
+  bodyCard.classList.add('card-body')
+  card.appendChild(bodyCard)
+  
   const ratingDiv = document.createElement('div');
   ratingDiv.classList.add('rating-body');
-  ratingDiv.innerHTML = 'Rating = ' + review.rating;
+  ratingDiv.innerHTML = 'Rating: ' + review.rating + '/5';
+  bodyCard.appendChild(ratingDiv);
 
   const bodyDiv = document.createElement('div');
   bodyDiv.classList.add('review-body');
+  bodyDiv.classList.add('card-text');
   bodyDiv.innerHTML = review.text;
+  bodyCard.appendChild(bodyDiv);
+
+  const timeFoot = document.createElement('footer');
+  timeFoot.classList.add('blockquote-footer');
+  timeFoot.innerHTML = timeStr;
+  card.appendChild(timeFoot);
 
   const reviewDiv = document.createElement('div');
   reviewDiv.classList.add('review-div');
-  reviewDiv.appendChild(headerDiv);
-  reviewDiv.appendChild(ratingDiv);
-  reviewDiv.appendChild(bodyDiv);
+  
 
-  return reviewDiv;
+  return card;
 }
 
 // set merchant name in all hidden input forms

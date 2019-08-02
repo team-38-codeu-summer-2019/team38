@@ -22,7 +22,7 @@ nav ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #949494;
+  background-color: #1E88E5;
 }
 
 /* Keep navigation menu on one line. */
@@ -41,11 +41,15 @@ nav li a {
 }
 
 nav li a:hover {
-  background-color: #9E9E9E;
+  background-color: #0D47A1;
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+}
+
+nav {
+  margin-bottom: 4rem;
 }
 
 .hidden {

@@ -3,14 +3,16 @@ body {
   margin: 0;
 }
 
-#merchant-name {
-  margin: 2px;
+.center {
+  text-align: center;
 }
 
 #merchant-container {
-  border: 3px solid #45484d;
   padding: 5px;
   margin: 2px;
+  width: 30rem;
+  text-align: center;
+  margin: 4rem auto;
 }
 
 .merchant-info {
@@ -21,10 +23,8 @@ body {
   width: 300px;
 }
 
-.menu {
-  border: 1px solid #7b8392;
-  padding: 5px;
-  margin: 2px;
+#menus {
+  margin: 0 4rem 4rem 4rem;
 }
 
 .menu-img {

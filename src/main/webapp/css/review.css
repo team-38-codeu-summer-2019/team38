@@ -1,10 +1,10 @@
 
-
 /* Set the size of the review input to be 100 pixels high
    and will fill the width of its parent element. */
 #review-input {
   height: 100px;
-  width: 100%;
+  width: 50%;
+  margin-top: 1rem;
 }
 
 /* Give each message a rounded border. */
@@ -28,18 +28,33 @@
 /* Give the message body a margin so the text
    isn't too close to the border. */
 .review-body {
-  margin: 5px;
+  margin: 0 4rem 4rem 4rem;
 }
 
-/* Add styling to images inside message body. */
+/* Add styling to images inside message body.
 .review-body img {
   display: block;
   margin-top: 25px;
   max-width: 100%;
-}
+} */
 
 /* Use this to hide certain elements like forms if the
    user is not logged in or viewing their own page. */
 .hidden {
   display: none;
+}
+
+select {
+  width: 2rem;
+}
+
+input[type=submit] {
+  border-radius: 4px;
+  background-color: #448AFF;
+  color: #fff;
+  border: none;
+}
+
+input[type=submit]:hover {
+  background-color: #82B1FF;
 }

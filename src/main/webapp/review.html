@@ -1,14 +1,14 @@
 
 
-<div>
+<div class="review-body">
     <h1 id="page-title">Review</h1>
 
     <div id="overall-rating-container">Loading...</div>
 
     <form id="review-form" action="/reviews" method="POST" class="hidden">
         Enter your review:
-        <br/>
-        Rating:
+        <br/><br/>
+
         <select name="rating">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -19,7 +19,7 @@
 
         <br/>
         <input name="merchant" id="merchant-input" value="" type="hidden">
-        <textarea name="text" id="review-input"></textarea>
+        <textarea name="text" id="review-input" class="form-control"></textarea>
         <br/>
         <input type="submit" value="Submit">
     </form>
