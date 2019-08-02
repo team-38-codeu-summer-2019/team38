@@ -1,45 +1,45 @@
-<!--
-Copyright 2019 Google Inc.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Can Tin</title>
+<head>
+    <title>Merchant Feed</title>
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/user-page.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="/js/navigation-loader.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <div id="nav-placeholder"></div>
     <!-- insert navigation bar from navigation.html -->
     <script>
-      $.get("navigation.html", function(data){
-        $("#nav-placeholder").replaceWith(data);
-      });
+         $.get("navigation.html", function(data){
+          $("#nav-placeholder").replaceWith(data);
+         });
     </script>
-  </head>
 
-  <body style="margin: 10px;">
-    <h1>Can Tin</h1>
-    <p>
-      Hello! This website is a catalog for your favorite meal on campus!
-      <br>
-      Review your food and help people find new stuff to eat!
-    </p>
-  </body>
+    <script src="/js/search.js"></script>
+</head>
+<body onload="buildUI(getMerchantSearch()['merchant'])" style="margin: 10px;">
+ <div id="content">
+  <br>
+  <form action="/search" method="POST" style="max-width: 500px">
+    <div class="form-row">
+      <div class="form-group col-md-10">
+        <input class="form-control w-25" id="search" name="merchant" type="search" placeholder="Search" aria-label="Search">
+      </div>
+      <!-- Search Merchant: <input name="merchant" placeholder="Name/Location"> -->
+      <!-- <input type="submit" value="Submit"> -->
+      <div class="form-group col-md-2">
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </div>
+      <!-- <div class="form-group col-md-2">
+        <button class="btn btn-outline-success my-2 my-sm-0" onclick="buildUI('')">View All</button>
+      </div> -->
+    </div>
+  </form>
+  <br>
+  <br>
+  <!-- <div align="right"><a href="add-merchant.html">Add new merchant</a></div> -->
+  <div id="message-container" style="max-width: 500px">Loading...</div>
+ </div>
+</body>
 </html>
-

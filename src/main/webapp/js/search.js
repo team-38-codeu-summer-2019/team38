@@ -1,22 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Merchant Feed</title>
-<link rel="stylesheet" href="/css/main.css">
-<link rel="stylesheet" href="/css/user-page.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="/js/navigation-loader.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-<div id="nav-placeholder"></div>
-<!-- insert navigation bar from navigation.html -->
-<script>
- $.get("navigation.html", function(data){
-  $("#nav-placeholder").replaceWith(data);
- });
-</script>
-<script>
-    
+
   // Fetch messages and add them to the page.
   function fetchMerchants(merchantSearch){
     const url = '/search';
@@ -28,7 +10,7 @@
         merchantContainer.innerHTML = '<p>There are no merchants yet.</p>';
       }
       else{
-        merchantContainer.innerHTML = '';  
+        merchantContainer.innerHTML = '';
       }
       merchants.sort( function(a,b){  //sort alphabetically
         if(a.name < b.name) { return -1; }
@@ -36,13 +18,14 @@
         return 0;
       });
       let count = 0;
-      merchants.forEach((merchant) => {  
+      merchants.forEach((merchant) => {
        console.log(merchant.name+" "+merchantSearch);
        if( (merchant.name.toLowerCase().includes(merchantSearch.toLowerCase())) || (merchant.location.toLowerCase().includes(merchantSearch.toLowerCase())) || (merchantSearch=="") ) {
         const merchantDiv = buildMerchantDiv(merchant);
 
         const linkEl = document.createElement('a');
         linkEl.setAttribute('href', '/merchants.html?id='+ merchant.id)
+        linkEl.setAttribute("style", "text-decoration: none; color: #000000");
         linkEl.appendChild(merchantDiv)
 
         merchantContainer.appendChild(linkEl);
@@ -50,31 +33,22 @@
        }
       });
       if(count==0 && merchantSearch!=""){
-        merchantContainer.innerHTML = '<p>Search did not match any merchant.</p>';  
+        merchantContainer.innerHTML = '<p>Search did not match any merchant.</p>';
       }
     });
   }
-  
+
   function buildMerchantDiv(merchant){
-   const merchantLink = document.createElement('a');
-   merchantLink.appendChild(document.createTextNode(merchant.name))
-   merchantLink.href = '/merchants.html?id=' + merchant.id
+   const merchantNameH4 = document.createElement("h4");
+   merchantNameH4.appendChild(document.createTextNode(merchant.name))
 
    const nameDiv = document.createElement('div');
-   nameDiv.classList.add("left-align");
-   nameDiv.appendChild(merchantLink);
+   nameDiv.setAttribute("style", "display: inline-block;");
+   nameDiv.appendChild(merchantNameH4)
    console.log(nameDiv)
-      
-   const headerDiv = document.createElement('div');
-   headerDiv.classList.add('message-header');
-   headerDiv.appendChild(nameDiv);
-   
-   const bodyDiv1 = document.createElement('div');
-   bodyDiv1.classList.add('message-body');
-   bodyDiv1.appendChild(document.createTextNode(merchant.cuisine));
 
-   const bodyDiv2 = document.createElement('div');
-   bodyDiv2.classList.add('message-body');
+   const distDiv = document.createElement('div');
+   distDiv.classList.add('right-align');
    if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = {
@@ -82,26 +56,41 @@
         lon: position.coords.longitude
       };
     var distance = getDistance(pos.lat,pos.lon,merchant.latitude,merchant.longitude);
-    bodyDiv2.appendChild(document.createTextNode(distance));
+    distDiv.appendChild(document.createTextNode(distance + " from you"));
     });
    } else {
      console.log("error");
    }
 
+   const headerDiv = document.createElement('div');
+   headerDiv.classList.add('message-header');
+   headerDiv.classList.add('panel-heading');
+   headerDiv.appendChild(nameDiv);
+   headerDiv.appendChild(distDiv);
+
+   const bodyDiv1 = document.createElement('div');
+   bodyDiv1.classList.add('message-body');
+   bodyDiv1.appendChild(document.createTextNode(merchant.cuisine + " Cuisine"));
+
    const bodyDiv3 = document.createElement('div');
    bodyDiv3.classList.add('message-body');
    bodyDiv3.appendChild(document.createTextNode(merchant.location));
-   
+
+   const bodyContainer = document.createElement('div');
+   bodyContainer.classList.add('panel-body');
+   bodyContainer.appendChild(bodyDiv1);
+   bodyContainer.appendChild(bodyDiv3);
+
    const merchantDiv = document.createElement('div');
    merchantDiv.classList.add("message-div");
+   merchantDiv.classList.add("panel");
+   merchantDiv.classList.add("panel-default");
    merchantDiv.appendChild(headerDiv);
-   merchantDiv.appendChild(bodyDiv1);
-   merchantDiv.appendChild(bodyDiv2);
-   merchantDiv.appendChild(bodyDiv3);
-   
+   merchantDiv.appendChild(bodyContainer);
+
    return merchantDiv;
   }
-  
+
   // Fetch data and populate the UI of the page.
   function buildUI(merchant){
     fetchMerchants(merchant);
@@ -138,21 +127,3 @@
     });
     return vars;
   }
-
-</script>
-</head>
-<body onload="buildUI(getMerchantSearch()['merchant'])">
- <div id="content">
-  <h1>Merchant Feed</h1>
-  <form action="/search" method="POST">
-    Search Merchant: <input name="merchant" placeholder="Name/Location">
-    <input type="submit" value="Submit">
-    <button onclick="buildUI('')">View All</button>
-  </form>
-  <div align="right"><a href="add-merchant.html">Add new merchant</a></div>
-  <hr/>
-  <div id="message-container" style="max-width: 500px">Loading...</div>
- </div>
-
-</body>
-</html>

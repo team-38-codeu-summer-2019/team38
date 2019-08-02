@@ -300,7 +300,6 @@ public class Datastore {
 
   public List<Merchant> getAllMerchants() {
     List<Merchant> merchants = new ArrayList<>();
-
     Query query = new Query("Merchant");
     PreparedQuery results = datastore.prepare(query);
 
