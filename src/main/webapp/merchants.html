@@ -55,15 +55,10 @@
         locationEl.appendChild(locNode);
         merchantDesc.appendChild(locationEl);
 
-        const universityEl = document.createElement('p');
-        const universityNode = document.createTextNode('University: ' + merchant.universityName);
-        universityEl.appendChild(universityNode);
-        merchantDesc.appendChild(universityEl);
-
         const cuisineEl = document.createElement('p');
         const cuisineNode = document.createTextNode('Cuisine: ' + merchant.cuisine);
         cuisineEl.appendChild(cuisineNode);
-        merchantDesc.appendChild(cuisineEl);
+        merchantDesc.appendChild(cuisineEl)
 
         // const priceRangeEl = document.createElement('p');
         // priceRangeEl.innerHTML = 'Price range: ';

@@ -26,7 +26,6 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Merchant;
-import com.google.codeu.data.University;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -67,15 +66,6 @@ public class AddMerchantServlet extends HttpServlet {
     jsonObject.addProperty("cuisine", merchant.getCuisine());
     jsonObject.addProperty("location", merchant.getLocation());
 
-    long universityID = merchant.getUniversity();
-    University university = datastore.getUniversity(universityID);
-    String universityName = "";
-    if (university != null) {
-      universityName = university.getName();
-    }
-
-    jsonObject.addProperty("universityID", universityID);
-    jsonObject.addProperty("universityName", universityName);
     response.getWriter().println(jsonObject.toString());
   }
 
@@ -89,12 +79,11 @@ public class AddMerchantServlet extends HttpServlet {
       image = getUploadedFileUrl(request, "file");
     }
     String cuisine = Jsoup.clean(request.getParameter("cuisine"), Whitelist.none());
-    long university = Long.parseLong(Jsoup.clean(request.getParameter("univ-ID"), Whitelist.none()));
     String location = Jsoup.clean(request.getParameter("location"), Whitelist.none());
     double latitude = Double.parseDouble(Jsoup.clean(request.getParameter("latitude"), Whitelist.none()));
     double longitude = Double.parseDouble(Jsoup.clean(request.getParameter("longitude"), Whitelist.none()));
 
-    Merchant merchant = new Merchant(name,cuisine,university,latitude,longitude,location,image);
+    Merchant merchant = new Merchant(name, cuisine, latitude, longitude, location, image);
     datastore.storeMerchant(merchant);
 
     response.sendRedirect("/search.html");

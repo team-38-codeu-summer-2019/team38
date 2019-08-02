@@ -9,27 +9,24 @@ public class Merchant {
   private String image;
   private double latitude;
   private double longitude;
-  private long university;
   private String location;
   private String cuisine;
   private String[] paymentOptions;
 
-  public Merchant(UUID id, String name, String cuisine, long university, double latitude, double longitude, String location, String image) {
+  public Merchant(UUID id, String name, String cuisine, double latitude, double longitude, String location, String image) {
     this.id = id;
     this.name = name;
     this.cuisine = cuisine;
-    this.university = university;
     this.latitude = latitude;
     this.longitude = longitude;
     this.location = location;
     this.image = image;
   }
 
-  public Merchant(String name, String cuisine, long university, double latitude, double longitude, String location, String image) {
+  public Merchant(String name, String cuisine, double latitude, double longitude, String location, String image) {
     this.id = UUID.randomUUID();
     this.name = name;
     this.cuisine = cuisine;
-    this.university = university;
     this.latitude = latitude;
     this.longitude = longitude;
     this.location = location;
@@ -50,10 +47,6 @@ public class Merchant {
 
   public double getLatitude() {
     return latitude;
-  }
-
-  public long getUniversity() {
-    return university;
   }
 
   public double getLongitude() {
