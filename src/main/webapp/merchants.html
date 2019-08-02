@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/merchants.css">
     <link rel="stylesheet" href="/css/review.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="/js/navigation-loader.js"></script>
@@ -16,18 +17,22 @@
         fetch(url).then((response) => {
           return response.json();
         }).then((merchant) => {
-          const merchantName = document.getElementById('merchant-name');
-          const nameNode = document.createTextNode(merchant.name);
-          merchantName.appendChild(nameNode);
-
           const merchantContainer = document.getElementById('merchant-container');
+          merchantContainer.classList.add("card")
           merchantContainer.innerHTML = '';
-
+          
           if (merchant.image != null) {
             const imgElement = buildImageElement(merchant.image);
             imgElement.classList.add("merchant-img");
+            imgElement.classList.add("card-img-top");
             merchantContainer.appendChild(imgElement);
           }
+
+          const merchantName = document.createElement('h2');
+          merchantName.classList.add("card-title")
+          const nameNode = document.createTextNode(merchant.name);
+          merchantName.appendChild(nameNode);
+          merchantContainer.appendChild(merchantName)
           
           const merchantDesc = buildMerchantDescription(merchant);
           merchantContainer.appendChild(merchantDesc)
@@ -84,20 +89,27 @@
           H3.appendChild(h3Node);
           menuContainer.appendChild(H3)
 
+          const rowCont = document.createElement('div');
+          rowCont.classList.add("row");
+          rowCont.classList.add("flex-nowrap");
+          menuContainer.appendChild(rowCont);
+
           menus.forEach((menu) => {
             const menuDiv = document.createElement('div');
             menuDiv.classList.add("menu");
+            menuDiv.classList.add("col-3");
+
+            if (menu.image != null) {
+              const imgElement = buildImageElement(menu.image);
+              imgElement.classList.add("merchant-img");
+              imgElement.classList.add("card-img-top");
+              menuDiv.appendChild(imgElement);
+            }
 
             const H4 = document.createElement('h4');
             const h4Node = document.createTextNode(menu.name);
             H4.appendChild(h4Node);
             menuDiv.appendChild(H4)
-
-            if (menu.image != null) {
-              const imgElement = buildImageElement(menu.image);
-              imgElement.classList.add("merchant-img");
-              menuDiv.appendChild(imgElement);
-            }
 
             const priceElement = document.createElement('p');
             const priceNode = document.createTextNode('Price: ' + menu.price);
@@ -109,7 +121,7 @@
             descElement.appendChild(descNode);
             menuDiv.appendChild(descElement)
 
-            menuContainer.appendChild(menuDiv)
+            rowCont.appendChild(menuDiv)
           })
         })
       }
@@ -132,11 +144,10 @@
     </script>
   </head>
 
-  <body onload="buildUI()" style="margin: 10px">
+  <body onload="buildUI()">
 
-    <h2 id="merchant-name"></h2>
     <div id="merchant-container"></div>
-    <div id="menus"></div>
+    <div id="menus" class="container-fluid"></div>
 
     <div id="review-placeholder"></div>
   </body>
