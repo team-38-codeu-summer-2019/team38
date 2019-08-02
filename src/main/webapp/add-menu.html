@@ -30,10 +30,39 @@ limitations under the License.
         inp.setAttribute('value', merchantId);
       }
 
+      function fetchBlobstoreUrlAndShowForm() {
+        fetch('/menu-upload-url')
+          .then((response) => {
+            return response.text();
+          })
+          .then((imageUploadUrl) => {
+            const messageForm = document.getElementById('form');
+            messageForm.action = imageUploadUrl;
+          });
+      }
+
+      function onSelectChange() {
+        var selectedValue = document.getElementById("image-option").value;    
+        selectedValue == "1" ? upload() : link();
+      }
+
+      function upload() {
+        document.getElementById("enterUrl").disabled = true;
+        document.getElementById("fileBrowse").disabled = false;
+      }
+
+      function link() {    
+        document.getElementById("fileBrowse").disabled = true;
+        document.getElementById("enterUrl").disabled = false;
+      }
+
+
       function buildUI() {
+        fetchBlobstoreUrlAndShowForm()
         const url = new URL(window.location.href)
         const id = url.searchParams.get("merchantId")
         insertMerchantId(id)
+        upload()
       }
     </script>
     <nav>
@@ -45,10 +74,15 @@ limitations under the License.
     </nav>
   </head>
   <body onload="buildUI()" style="margin: 10px;">
-    <form action="/menus" method="POST">
+    <form id="form" method="POST" enctype="multipart/form-data">
       <h4>Enter a new menu:</h4>
       Name: <input name="name" type="text"><br>
-      Image URL: <input name="image" type="text"><br>
+      Image URL: <select id="image-option" onchange="onSelectChange()">
+                  <option value="1">Upload an Image</option>
+                  <option value="2">Load from URL</option>
+                </select>
+      <input name="file" type="file" id="fileBrowse" accept="image/*">
+      <input name="image" id="enterUrl" type="text"><br>
       Description: <input name="description" type="textarea"><br>
       Price: <input name="price" type="text"><br>
       <div class="hidden">
