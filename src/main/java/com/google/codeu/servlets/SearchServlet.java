@@ -42,6 +42,6 @@ public class SearchServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         String merchant = Jsoup.clean(request.getParameter("merchant"), Whitelist.none());
-        response.sendRedirect("/search.html?merchant=" + merchant);
+        response.sendRedirect("/index.html?merchant=" + merchant);
     }
 }
