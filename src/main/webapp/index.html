@@ -16,6 +16,7 @@
  });
 </script>
 <script>
+  
     
   // Fetch messages and add them to the page.
   function fetchMerchants(merchantSearch){
@@ -104,6 +105,7 @@
   
   // Fetch data and populate the UI of the page.
   function buildUI(merchant){
+    document.getElementById("search").value = merchant;
     fetchMerchants(merchant);
   }
 
@@ -147,18 +149,19 @@
   <form action="/search" method="POST" style="max-width: 500px">
     <div class="form-row">
       <div class="form-group col-md-10">
-        <input class="form-control w-25" name="merchant" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control w-25" id="search" name="merchant" type="search" placeholder="Search" aria-label="Search">
       </div>
       <!-- Search Merchant: <input name="merchant" placeholder="Name/Location"> -->
       <!-- <input type="submit" value="Submit"> -->
       <div class="form-group col-md-2">
         <button class="btn btn-primary" type="submit">Submit</button>
       </div>
-      <div class="form-group col-md-2">
+      <!-- <div class="form-group col-md-2">
         <button class="btn btn-outline-success my-2 my-sm-0" onclick="buildUI('')">View All</button>
-      </div>
+      </div> -->
     </div>
   </form>
+  <br>
   <br>
   <!-- <div align="right"><a href="add-merchant.html">Add new merchant</a></div> -->
   <div id="message-container" style="max-width: 500px">Loading...</div>
