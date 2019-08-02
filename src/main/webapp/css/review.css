@@ -45,7 +45,7 @@
 }
 
 select {
-  width: 50%;
+  width: 2rem;
 }
 
 input[type=submit] {
