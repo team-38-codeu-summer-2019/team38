@@ -84,7 +84,7 @@
           const menuContainer = document.getElementById('menus');
           menuContainer.innerHTML = ''
 
-          const H3 = document.createElement('h3');
+          const H3 = document.createElement('h2');
           const h3Node = document.createTextNode('Menu');
           H3.appendChild(h3Node);
           menuContainer.appendChild(H3)
@@ -97,6 +97,7 @@
           menus.forEach((menu) => {
             const menuDiv = document.createElement('div');
             menuDiv.classList.add("menu");
+            menuDiv.classList.add("card");
             menuDiv.classList.add("col-3");
 
             if (menu.image != null) {

@@ -7,10 +7,6 @@ body {
   text-align: center;
 }
 
-#merchant-name {
-  margin: 2px;
-}
-
 #merchant-container {
   padding: 5px;
   margin: 2px;
@@ -27,7 +23,7 @@ body {
   width: 300px;
 }
 
-.menu, #review-placeholder {
+#menus {
   margin: 0 4rem 4rem 4rem;
 }
 
