@@ -25,6 +25,7 @@
 
         const linkEl = document.createElement('a');
         linkEl.setAttribute('href', '/merchants.html?id='+ merchant.id)
+        linkEl.setAttribute("style", "text-decoration: none; color: #000000");
         linkEl.appendChild(merchantDiv)
 
         merchantContainer.appendChild(linkEl);
@@ -38,28 +39,16 @@
   }
 
   function buildMerchantDiv(merchant){
-   const merchantLink = document.createElement('a');
-   merchantLink.appendChild(document.createTextNode(merchant.name))
-   merchantLink.href = '/merchants.html?id=' + merchant.id
+   const merchantNameH4 = document.createElement("h4");
+   merchantNameH4.appendChild(document.createTextNode(merchant.name))
 
    const nameDiv = document.createElement('div');
-   nameDiv.classList.add("left-align");
-   nameDiv.appendChild(merchantLink);
+   nameDiv.setAttribute("style", "display: inline-block;");
+   nameDiv.appendChild(merchantNameH4)
    console.log(nameDiv)
 
-   const headerDiv = document.createElement('div');
-   headerDiv.classList.add('message-header');
-   headerDiv.classList.add('panel-heading');
-   headerDiv.appendChild(nameDiv);
-
-   const bodyDiv1 = document.createElement('div');
-   bodyDiv1.classList.add('message-body');
-   //bodyDiv1.classList.add('panel-body');
-   bodyDiv1.appendChild(document.createTextNode(merchant.cuisine));
-
-   const bodyDiv2 = document.createElement('div');
-   bodyDiv2.classList.add('message-body');
-  // bodyDiv2.classList.add('panel-body');
+   const distDiv = document.createElement('div');
+   distDiv.classList.add('right-align');
    if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = {
@@ -67,21 +56,29 @@
         lon: position.coords.longitude
       };
     var distance = getDistance(pos.lat,pos.lon,merchant.latitude,merchant.longitude);
-    bodyDiv2.appendChild(document.createTextNode(distance));
+    distDiv.appendChild(document.createTextNode(distance + " from you"));
     });
    } else {
      console.log("error");
    }
 
+   const headerDiv = document.createElement('div');
+   headerDiv.classList.add('message-header');
+   headerDiv.classList.add('panel-heading');
+   headerDiv.appendChild(nameDiv);
+   headerDiv.appendChild(distDiv);
+
+   const bodyDiv1 = document.createElement('div');
+   bodyDiv1.classList.add('message-body');
+   bodyDiv1.appendChild(document.createTextNode(merchant.cuisine + " Cuisine"));
+
    const bodyDiv3 = document.createElement('div');
    bodyDiv3.classList.add('message-body');
-   //bodyDiv3.classList.add('panel-body');
    bodyDiv3.appendChild(document.createTextNode(merchant.location));
 
    const bodyContainer = document.createElement('div');
    bodyContainer.classList.add('panel-body');
    bodyContainer.appendChild(bodyDiv1);
-   bodyContainer.appendChild(bodyDiv2);
    bodyContainer.appendChild(bodyDiv3);
 
    const merchantDiv = document.createElement('div');
