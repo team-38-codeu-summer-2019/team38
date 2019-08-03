@@ -18,7 +18,7 @@
 
     <script src="/js/search.js"></script>
 </head>
-<body onload="buildUI(getMerchantSearch()['merchant'])" style="margin: 10px;">
+<body onload="buildUI(getMerchantSearch()['merchant'])">
  <div id="content">
   <br>
   <form action="/search" method="POST" style="max-width: 500px">
@@ -37,9 +37,8 @@
     </div>
   </form>
   <br>
-  <br>
   <!-- <div align="right"><a href="add-merchant.html">Add new merchant</a></div> -->
-  <div id="message-container" style="max-width: 500px">Loading...</div>
+  <div id="message-container" style="max-width: 500px; margin: 15px">Loading...</div>
  </div>
 </body>
 </html>

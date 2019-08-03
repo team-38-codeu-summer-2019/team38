@@ -94,6 +94,7 @@
   // Fetch data and populate the UI of the page.
   function buildUI(merchant){
     fetchMerchants(merchant);
+     document.getElementById('search').value = merchant;
   }
 
   function foundLocation(position){
